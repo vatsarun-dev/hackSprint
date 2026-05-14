@@ -6,18 +6,19 @@ import {
 	getSingleBlog,
 	updateBlog,
 } from "../controllers/blog.controller.js";
+import authMiddleware from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
 // Health check
-router.get("/health", (req, res) => {
+router.get("/health", (_req, res) => {
 	res.send("blog route is running");
 });
 
-router.post("/", createBlog);
+router.post("/", authMiddleware, createBlog);
 router.get("/", getAllBlogs);
 router.get("/:id", getSingleBlog);
-router.patch("/:id", updateBlog);
-router.delete("/:id", deleteBlog);
+router.patch("/:id", authMiddleware, updateBlog);
+router.delete("/:id", authMiddleware, deleteBlog);
 
 export default router;
