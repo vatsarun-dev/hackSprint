@@ -8,12 +8,7 @@ import { Card } from "../../../components/ui/card";
 import { Input } from "../../../components/ui/input";
 
 const LoginPage = () => {
-  const { register, handleSubmit } = useForm({
-    defaultValues: {
-      email: "aria@devconnect.io",
-      password: "password123",
-    },
-  });
+  const { register, handleSubmit, reset } = useForm();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -21,18 +16,19 @@ const LoginPage = () => {
 
   const onSubmit = async (values) => {
     await dispatch(loginUser(values));
+    reset();
     navigate(location.state?.from || "/dashboard");
   };
 
   return (
     <Card className="w-full max-w-xl rounded-[32px] p-8 sm:p-10">
       <div className="mb-8">
-        <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-4 py-2 text-sm text-[var(--muted-foreground)]">
+        <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-4 py-2 text-sm text-zinc-600 dark:text-zinc-400">
           <LogIn className="h-4 w-4" />
           Welcome back
         </span>
         <h2 className="mt-6 text-3xl font-semibold">Log in to your developer workspace</h2>
-        <p className="mt-3 text-sm text-[var(--muted-foreground)]">
+        <p className="mt-3 text-sm text-zinc-600 dark:text-zinc-400">
           Continue building your profile, publishing ideas, and growing your network.
         </p>
       </div>
@@ -40,11 +36,11 @@ const LoginPage = () => {
         <Input placeholder="Email address" type="email" {...register("email")} />
         <Input placeholder="Password" type="password" {...register("password")} />
         <div className="flex items-center justify-between text-sm">
-          <label className="flex items-center gap-2 text-[var(--muted-foreground)]">
+          <label className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
             <input type="checkbox" className="rounded border-white/20 bg-transparent" />
             Remember me
           </label>
-          <button type="button" className="text-indigo-300">
+          <button type="button" className="text-zinc-700 dark:text-white/80">
             Forgot password?
           </button>
         </div>
@@ -55,9 +51,9 @@ const LoginPage = () => {
           Continue with Google
         </Button>
       </form>
-      <p className="mt-6 text-center text-sm text-[var(--muted-foreground)]">
+      <p className="mt-6 text-center text-sm text-zinc-600 dark:text-zinc-400">
         New here?{" "}
-        <Link to="/signup" className="font-medium text-indigo-300">
+        <Link to="/signup" className="font-medium text-zinc-800 dark:text-white/80">
           Create an account
         </Link>
       </p>
@@ -66,3 +62,6 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+
+
+

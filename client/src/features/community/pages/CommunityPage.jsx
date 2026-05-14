@@ -26,31 +26,39 @@ const CommunityPage = () => {
   }, [debouncedQuery, skill]);
 
   return (
-    <div className="space-y-8">
-      <section className="rounded-[32px] border border-white/10 bg-[linear-gradient(135deg,rgba(139,92,246,0.14),rgba(59,130,246,0.05))] p-6 sm:p-8">
-        <p className="text-sm uppercase tracking-[0.22em] text-indigo-300">Developer discovery</p>
-        <h1 className="mt-3 text-4xl font-semibold">Find developers by skill, craft, and momentum</h1>
-        <p className="mt-4 max-w-2xl text-[var(--muted-foreground)]">
-          Search the community, filter by specialty, and build a sharper network around what you actually ship.
-        </p>
+    <div className="space-y-10">
+      <section className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+        <div>
+          <p className="text-sm uppercase tracking-[0.28em] text-zinc-500 dark:text-white/60">Developer discovery</p>
+          <h1 className="mt-4 text-5xl font-semibold leading-[0.95] tracking-[-0.05em] sm:text-6xl">
+            Find developers by skill, craft, and momentum.
+          </h1>
+        </div>
+        <div className="rounded-[2rem] border border-white/10 bg-white/5 p-5">
+          <p className="text-sm leading-7 text-zinc-600 dark:text-zinc-400">
+            Search the community, filter by specialty, and build a sharper network around what you actually ship.
+          </p>
+        </div>
       </section>
       <Card className="space-y-5">
         <div className="relative">
-          <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted-foreground)]" />
+          <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-600 dark:text-zinc-400" />
           <Input value={query} onChange={(event) => setQuery(event.target.value)} className="pl-11" placeholder="Search developers or skills" />
         </div>
         <div className="flex flex-wrap gap-2">
           {skillFilters.map((filter) => (
             <button key={filter} onClick={() => setSkill(filter)}>
-              <Badge className={skill === filter ? "border-indigo-400/40 bg-indigo-500/15 text-indigo-200" : ""}>{filter}</Badge>
+              <Badge className={skill === filter ? "border-zinc-950 bg-zinc-950 text-white dark:border-white/20 dark:bg-white/10 dark:text-white" : ""}>{filter}</Badge>
             </button>
           ))}
         </div>
       </Card>
       {filteredDevelopers.length ? (
         <div className="grid gap-5 lg:grid-cols-3">
-          {filteredDevelopers.map((developer) => (
-            <DeveloperCard key={developer.id} developer={developer} />
+          {filteredDevelopers.map((developer, index) => (
+            <div key={developer.id} className={index % 2 === 0 ? "lg:translate-y-8" : ""}>
+              <DeveloperCard developer={developer} />
+            </div>
           ))}
         </div>
       ) : (
@@ -64,3 +72,7 @@ const CommunityPage = () => {
 };
 
 export default CommunityPage;
+
+
+
+

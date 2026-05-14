@@ -2,9 +2,9 @@ import { Outlet } from "react-router-dom";
 
 const AuthLayout = () => {
   return (
-    <div className="grid min-h-screen bg-[var(--background)] text-[var(--foreground)] lg:grid-cols-[1.1fr_0.9fr]">
+    <div className="grid min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-950 dark:text-zinc-50 lg:grid-cols-[1.1fr_0.9fr]">
       <section className="relative hidden overflow-hidden border-r border-white/10 lg:block">
-        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(79,70,229,0.9),rgba(14,165,233,0.7))]" />
+        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(0,0,0,0.96),rgba(24,24,24,0.88))]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.18),transparent_38%)]" />
         <div className="relative flex h-full flex-col justify-between p-12 text-white">
           <div>
@@ -23,7 +23,7 @@ const AuthLayout = () => {
             {["Portfolio momentum", "Community visibility", "Blog publishing flow"].map((item, index) => (
               <div
                 key={item}
-                className="glass-panel flex items-center justify-between rounded-3xl px-5 py-4 text-sm"
+                className="flex items-center justify-between rounded-3xl border border-white/10 bg-white/10 px-5 py-4 text-sm backdrop-blur-xl"
                 style={{ transform: `translateX(${index * 18}px)` }}
               >
                 <span>{item}</span>
@@ -41,3 +41,6 @@ const AuthLayout = () => {
 };
 
 export default AuthLayout;
+
+
+

@@ -1,17 +1,22 @@
-import { blogs } from "../../../lib/mock-data";
+import { useSelector } from "react-redux";
 import BlogCard from "../../../components/cards/BlogCard";
 
 const BlogsPage = () => {
+  const blogs = useSelector((state) => state.blogs.items);
   return (
-    <div className="space-y-8">
-      <section className="rounded-[32px] border border-white/10 bg-[linear-gradient(135deg,rgba(139,92,246,0.14),rgba(59,130,246,0.05))] p-6 sm:p-8">
-        <p className="text-sm uppercase tracking-[0.22em] text-indigo-300">Blog feed</p>
-        <h1 className="mt-3 text-4xl font-semibold">Read thoughtful technical writing from the community</h1>
-        <p className="mt-4 max-w-2xl text-[var(--muted-foreground)]">
-          Medium-style reading flow, clean markdown support, and story-first presentation for technical insight.
+    <div className="space-y-10">
+      <section className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+        <div>
+          <p className="text-sm uppercase tracking-[0.28em] text-zinc-500 dark:text-white/60">Blog feed</p>
+          <h1 className="mt-4 text-5xl font-semibold leading-[0.95] tracking-[-0.05em] sm:text-6xl">
+            Read thoughtful technical writing from the community.
+          </h1>
+        </div>
+        <p className="max-w-xl text-sm leading-7 text-zinc-600 dark:text-zinc-400 lg:ml-auto">
+          Spacious reading flow, clean markdown support, and a quieter editorial rhythm that keeps the writing in front.
         </p>
       </section>
-      <div className="grid gap-5 lg:grid-cols-2">
+      <div className="space-y-6">
         {blogs.map((blog) => (
           <BlogCard key={blog.id} blog={blog} />
         ))}
@@ -21,3 +26,7 @@ const BlogsPage = () => {
 };
 
 export default BlogsPage;
+
+
+
+

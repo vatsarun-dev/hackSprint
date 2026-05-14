@@ -4,10 +4,13 @@ export const Textarea = ({ className, ...props }) => {
   return (
     <textarea
       className={cn(
-        "min-h-32 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-[var(--foreground)] outline-none transition placeholder:text-[var(--muted-foreground)] focus:border-indigo-400/60 focus:bg-white/8",
+        "min-h-32 w-full rounded-xl border border-zinc-300 bg-white/80 px-4 py-3 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-500 focus:border-cyan-500/70 focus:bg-white dark:border-zinc-700 dark:bg-zinc-950/70 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-cyan-300/70 dark:focus:bg-zinc-950",
         className,
       )}
       {...props}
     />
   );
 };
+
+
+

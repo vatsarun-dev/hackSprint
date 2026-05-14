@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export const useRevealAnimation = (ref) => {
   useEffect(() => {
@@ -8,14 +7,15 @@ export const useRevealAnimation = (ref) => {
 
     const ctx = gsap.context(() => {
       gsap.from("[data-reveal]", {
-        y: 36,
+        y: 48,
         opacity: 0,
-        duration: 0.9,
-        stagger: 0.12,
+        filter: "blur(10px)",
+        duration: 1,
+        stagger: 0.1,
         ease: "power3.out",
         scrollTrigger: {
           trigger: ref.current,
-          start: "top 75%",
+          start: "top 78%",
         },
       });
     }, ref);
@@ -23,3 +23,6 @@ export const useRevealAnimation = (ref) => {
     return () => ctx.revert();
   }, [ref]);
 };
+
+
+

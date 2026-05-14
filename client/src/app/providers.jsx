@@ -6,6 +6,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { store } from "../redux/store";
 import { initializeAuth } from "../redux/slices/authSlice";
 import { initializeTheme } from "../redux/slices/uiSlice";
+import { initializeProjects } from "../redux/slices/projectsSlice";
+import { initializeBlogs } from "../redux/slices/blogsSlice";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -16,6 +18,8 @@ const AppLifecycle = ({ children }) => {
   useEffect(() => {
     dispatch(initializeAuth());
     dispatch(initializeTheme());
+    dispatch(initializeProjects());
+    dispatch(initializeBlogs());
   }, [dispatch]);
 
   useEffect(() => {
@@ -54,3 +58,6 @@ export const Providers = ({ children }) => {
     </Provider>
   );
 };
+
+
+

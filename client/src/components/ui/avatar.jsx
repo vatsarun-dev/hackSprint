@@ -9,7 +9,10 @@ export const AvatarImage = AvatarPrimitive.Image;
 
 export const AvatarFallback = ({ className, ...props }) => (
   <AvatarPrimitive.Fallback
-    className={cn("flex h-full w-full items-center justify-center bg-indigo-500/20 text-sm font-semibold text-indigo-200", className)}
+    className={cn("flex h-full w-full items-center justify-center bg-zinc-100 text-sm font-semibold text-zinc-800 dark:bg-white/10 dark:text-white", className)}
     {...props}
   />
 );
+
+
+

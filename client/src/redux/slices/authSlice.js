@@ -34,6 +34,14 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       setStoredSession("devconnect_session", null);
     },
+    updateProfile: (state, action) => {
+      state.user = {
+        ...state.user,
+        ...action.payload,
+      };
+      state.isAuthenticated = true;
+      setStoredSession("devconnect_session", state.user);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -66,5 +74,8 @@ const authSlice = createSlice({
   },
 });
 
-export const { initializeAuth, logoutUser } = authSlice.actions;
+export const { initializeAuth, logoutUser, updateProfile } = authSlice.actions;
 export default authSlice.reducer;
+
+
+

@@ -4,10 +4,10 @@ import MobileBottomNav from "../components/sidebar/MobileBottomNav";
 
 const DashboardLayout = () => {
   return (
-    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
+    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-950 dark:text-zinc-50">
       <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute left-20 top-20 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(168,85,247,0.18),transparent_68%)] blur-3xl" />
-        <div className="absolute bottom-10 right-10 h-64 w-64 rounded-full bg-[radial-gradient(circle,rgba(59,130,246,0.16),transparent_65%)] blur-3xl" />
+        <div className="absolute left-20 top-20 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.06),transparent_68%)] blur-3xl" />
+        <div className="absolute bottom-10 right-10 h-64 w-64 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.05),transparent_65%)] blur-3xl" />
       </div>
       <div className="mx-auto flex min-h-screen max-w-[1600px]">
         <AppSidebar />
@@ -21,3 +21,6 @@ const DashboardLayout = () => {
 };
 
 export default DashboardLayout;
+
+
+

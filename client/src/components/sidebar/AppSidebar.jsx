@@ -9,7 +9,7 @@ import { Button } from "../ui/button";
 const items = [
   { icon: LayoutDashboard, label: "Dashboard", to: "/dashboard" },
   { icon: UserRound, label: "My Profile", to: "/profile/edit" },
-  { icon: FolderKanban, label: "Projects", to: "/projects/create" },
+  { icon: FolderKanban, label: "Projects", to: "/projects" },
   { icon: BookOpen, label: "Blogs", to: "/blogs/write" },
   { icon: BarChart3, label: "Community", to: "/developers" },
   { icon: Settings, label: "Settings", to: "/settings" },
@@ -30,7 +30,7 @@ const AppSidebar = () => {
       <div className="mb-8 flex items-center justify-between px-3">
         <div className={cn("overflow-hidden transition", collapsed && "w-0 opacity-0")}>
           <p className="text-lg font-semibold">DevConnect</p>
-          <p className="text-sm text-[var(--muted-foreground)]">Creator dashboard</p>
+          <p className="text-sm text-zinc-600 dark:text-zinc-400">Creator dashboard</p>
         </div>
         <Button variant="secondary" size="sm" onClick={() => dispatch(toggleSidebar())}>
           <Menu className="h-4 w-4" />
@@ -43,7 +43,7 @@ const AppSidebar = () => {
             to={to}
             className={({ isActive }) =>
               cn(
-                "flex items-center gap-3 rounded-2xl px-4 py-3 text-sm text-[var(--muted-foreground)] transition hover:bg-white/8 hover:text-[var(--foreground)]",
+                "flex items-center gap-3 rounded-2xl px-4 py-3 text-sm text-zinc-600 dark:text-zinc-400 transition hover:bg-white/8 hover:text-zinc-950 dark:hover:text-zinc-50",
                 isActive && "bg-white text-slate-950 dark:bg-white/12 dark:text-white",
                 collapsed && "justify-center px-0",
               )
@@ -70,3 +70,6 @@ const AppSidebar = () => {
 };
 
 export default AppSidebar;
+
+
+

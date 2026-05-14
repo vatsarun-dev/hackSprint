@@ -5,7 +5,7 @@ import { cn } from "../../lib/utils";
 const items = [
   { to: "/dashboard", icon: Home, label: "Home" },
   { to: "/developers", icon: Search, label: "Community" },
-  { to: "/projects/create", icon: FolderKanban, label: "Projects" },
+  { to: "/projects", icon: FolderKanban, label: "Projects" },
   { to: "/blogs/write", icon: BookOpen, label: "Write" },
   { to: "/settings", icon: Settings, label: "Settings" },
 ];
@@ -13,14 +13,14 @@ const items = [
 const MobileBottomNav = () => {
   return (
     <div className="fixed inset-x-0 bottom-4 z-50 px-4 lg:hidden">
-      <div className="mx-auto grid max-w-lg grid-cols-5 rounded-[28px] border border-white/10 bg-[color:var(--card)]/90 p-2 shadow-[0_24px_70px_rgba(15,23,42,0.28)] backdrop-blur-2xl">
+      <div className="mx-auto grid max-w-lg grid-cols-5 rounded-[28px] border border-white/10 bg-white/90 dark:bg-zinc-900/90 p-2 shadow-[0_24px_70px_rgba(15,23,42,0.28)] backdrop-blur-2xl">
         {items.map(({ to, icon: Icon, label }) => (
           <NavLink
             key={to}
             to={to}
             className={({ isActive }) =>
               cn(
-                "flex flex-col items-center gap-1 rounded-2xl px-2 py-3 text-[10px] text-[var(--muted-foreground)] transition",
+                "flex flex-col items-center gap-1 rounded-2xl px-2 py-3 text-[10px] text-zinc-600 dark:text-zinc-400 transition",
                 isActive && "bg-white text-slate-950 dark:bg-white/12 dark:text-white",
               )
             }
@@ -35,3 +35,6 @@ const MobileBottomNav = () => {
 };
 
 export default MobileBottomNav;
+
+
+
