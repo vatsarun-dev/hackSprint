@@ -12,7 +12,7 @@ import authMiddleware from "../middlewares/auth.middleware.js";
 const router = Router();
 
 // Health check
-router.get("/", (req, res) => {
+router.get("/health", (req, res) => {
 	res.send("user route is running");
 });
 
