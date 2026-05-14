@@ -16,14 +16,12 @@ router.get("/", (req, res) => {
 	res.send("user route is running");
 });
 
-// Protected route
-router.get("/me", authMiddleware, getMe);
 
-// Public routes
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.get("/refresh", getRefreshToken);
 router.get("/logout", authMiddleware, logoutUser);
+router.get("/me", authMiddleware, getMe);
 router.get("/:id", getUser);
 
 export default router;
