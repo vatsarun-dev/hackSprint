@@ -1,9 +1,23 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { Code2, ExternalLink, MessageSquare, Pencil, Trash2 } from "lucide-react";
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
+import {
+  Code2,
+  ExternalLink,
+  MessageSquare,
+  Pencil,
+  Trash2,
+} from "lucide-react";
 import { useForm } from "react-hook-form";
-import { deleteProject, updateProject } from "../../../redux/slices/projectsSlice";
+import {
+  deleteProject,
+  updateProject,
+} from "../../../redux/slices/projectsSlice";
 import { Badge } from "../../../components/ui/badge";
 import { Button } from "../../../components/ui/button";
 import { Card } from "../../../components/ui/card";
@@ -18,7 +32,10 @@ const ProjectDetailsPage = () => {
   const dispatch = useDispatch();
   const projects = useSelector((state) => state.projects.items);
   const user = useSelector((state) => state.auth.user);
-  const project = useMemo(() => projects.find((item) => item.id === id), [id, projects]);
+  const project = useMemo(
+    () => projects.find((item) => item.id === id),
+    [id, projects],
+  );
   const [isEditing, setIsEditing] = useState(searchParams.get("edit") === "1");
   const { register, handleSubmit, reset } = useForm();
 
@@ -40,13 +57,18 @@ const ProjectDetailsPage = () => {
     return (
       <Card className="">
         <p className="text-lg font-semibold">Project not found</p>
-        <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">This project may have been removed.</p>
+        <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+          This project may have been removed.
+        </p>
       </Card>
     );
   }
 
-  const canManage = user?.username && project.author?.username === user.username;
-  const projectBasePath = location.pathname.startsWith("/dashboard") ? "/dashboard/projects" : "/projects";
+  const canManage =
+    user?.username && project.author?.username === user.username;
+  const projectBasePath = location.pathname.startsWith("/dashboard")
+    ? "/dashboard/projects"
+    : "/projects";
 
   const onUpdate = async (values) => {
     const payload = new FormData();
@@ -73,7 +95,11 @@ const ProjectDetailsPage = () => {
 
   return (
     <div className="space-y-10">
-      <img src={project.image} alt={project.title} className="h-80 w-full rounded-[2.8rem] object-cover sm:h-[30rem]" />
+      <img
+        src={project.image}
+        alt={project.title}
+        className="h-80 w-full rounded-[2.8rem] object-cover sm:h-[30rem]"
+      />
       <section className="grid gap-8 lg:grid-cols-[1fr_0.38fr]">
         <div className="space-y-6">
           <div>
@@ -82,13 +108,20 @@ const ProjectDetailsPage = () => {
                 <Badge key={tag}>{tag}</Badge>
               ))}
             </div>
-            <h1 className="mt-5 text-5xl font-semibold leading-[0.96] tracking-[-0.05em] sm:text-6xl">{project.title}</h1>
-            <p className="mt-5 max-w-3xl text-lg leading-8 text-zinc-600 dark:text-zinc-400">{project.description}</p>
+            <h1 className="mt-5 text-5xl font-semibold leading-[0.96] tracking-[-0.05em] sm:text-6xl">
+              {project.title}
+            </h1>
+            <p className="mt-5 max-w-3xl text-lg leading-8 text-zinc-600 dark:text-zinc-400">
+              {project.description}
+            </p>
           </div>
 
           {canManage && (
             <div className="flex gap-3">
-              <Button variant="secondary" onClick={() => setIsEditing((value) => !value)}>
+              <Button
+                variant="secondary"
+                onClick={() => setIsEditing((value) => !value)}
+              >
                 <Pencil className="h-4 w-4" />
                 {isEditing ? "Cancel edit" : "Edit project"}
               </Button>
@@ -103,36 +136,52 @@ const ProjectDetailsPage = () => {
             <Card className="">
               <form onSubmit={handleSubmit(onUpdate)} className="grid gap-4">
                 <Input placeholder="Title" {...register("title")} />
-                <Textarea placeholder="Description" {...register("description")} />
+                <Textarea
+                  placeholder="Description"
+                  {...register("description")}
+                />
                 <Input placeholder="Tech stack" {...register("techStack")} />
                 <Input placeholder="Features" {...register("features")} />
                 <Input placeholder="Tags" {...register("tags")} />
                 <Input placeholder="GitHub link" {...register("github")} />
                 <Input placeholder="Live link" {...register("live")} />
-                <Input type="file" accept="image/*" {...register("image")} className="pt-3" />
+                <Input
+                  type="file"
+                  accept="image/*"
+                  {...register("image")}
+                  className="pt-3"
+                />
                 <Button type="submit">Save changes</Button>
               </form>
             </Card>
           ) : null}
 
           <Card className="">
-            <h2 className="text-sm uppercase tracking-[0.24em] text-zinc-500 dark:text-white/60">Full overview</h2>
+            <h2 className="text-sm uppercase tracking-[0.24em] text-zinc-500 dark:text-white/60">
+              Full overview
+            </h2>
             <p className="mt-4 text-sm leading-7 text-zinc-600 dark:text-zinc-400">
-              {project.title} helps teams turn raw engineering output into a compelling public story. The experience is built
-              for clean onboarding, rich previews, and measurable product credibility.
+              {project.title} helps teams turn raw engineering output into a
+              compelling public story. The experience is built for clean
+              onboarding, rich previews, and measurable product credibility.
             </p>
           </Card>
           <Card className="">
-            <h2 className="text-sm uppercase tracking-[0.24em] text-zinc-500 dark:text-white/60">Key features</h2>
+            <h2 className="text-sm uppercase tracking-[0.24em] text-zinc-500 dark:text-white/60">
+              Key features
+            </h2>
             <div className="mt-4 grid gap-3">
               {(project.features || []).map((feature) => (
-                <div key={feature} className="rounded-[1.5rem] border border-zinc-300 bg-zinc-50 px-4 py-4 text-sm text-zinc-800 dark:border-white/8 dark:bg-white/5 dark:text-zinc-100">
+                <div
+                  key={feature}
+                  className="rounded-[1.5rem] border border-zinc-300 bg-zinc-50 px-4 py-4 text-sm text-zinc-800 dark:border-white/8 dark:bg-white/5 dark:text-zinc-100"
+                >
                   {feature}
                 </div>
               ))}
             </div>
           </Card>
-          <Card className="">
+          {/* <Card className="">
             <div className="flex items-center gap-3">
               <MessageSquare className="h-5 w-5 text-zinc-600 dark:text-white/70" />
               <h2 className="text-xl font-semibold">Comments</h2>
@@ -144,11 +193,13 @@ const ProjectDetailsPage = () => {
                 </div>
               ))}
             </div>
-          </Card>
+          </Card> */}
         </div>
         <Card className="h-fit space-y-5">
           <div>
-            <p className="text-sm uppercase tracking-[0.24em] text-zinc-600 dark:text-zinc-400">Built by</p>
+            <p className="text-sm uppercase tracking-[0.24em] text-zinc-600 dark:text-zinc-400">
+              Built by
+            </p>
             <p className="mt-3 text-2xl font-semibold">{project.author.name}</p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -175,7 +226,3 @@ const ProjectDetailsPage = () => {
 };
 
 export default ProjectDetailsPage;
-
-
-
-
