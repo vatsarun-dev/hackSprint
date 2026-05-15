@@ -64,6 +64,8 @@ export const router = createBrowserRouter([
           { path: "/dashboard/projects", element: withSuspense(ProjectsPage) },
           { path: "/dashboard/projects/:id", element: withSuspense(ProjectDetailsPage) },
           { path: "/projects/create", element: withSuspense(CreateProjectPage) },
+          { path: "/dashboard/blogs", element: withSuspense(BlogsPage) },
+          { path: "/dashboard/blogs/:id", element: withSuspense(BlogDetailsPage) },
           { path: "/blogs/write", element: withSuspense(WriteBlogPage) },
           { path: "/dashboard/community", element: withSuspense(CommunityPage) },
         ],

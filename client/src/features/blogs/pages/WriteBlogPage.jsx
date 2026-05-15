@@ -72,7 +72,7 @@ const WriteBlogPage = () => {
             </div>
           </TabsContent>
           <TabsContent value="preview">
-            <div className="rounded-[28px] border border-white/8 bg-white/5 p-5" data-color-mode="dark">
+            <div className="rounded-[28px] border border-zinc-300 bg-zinc-50 p-5 dark:border-white/8 dark:bg-white/5">
               <MDEditor.Markdown source={value || "Start writing to preview your article."} />
             </div>
           </TabsContent>

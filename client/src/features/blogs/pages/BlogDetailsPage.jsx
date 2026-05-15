@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import MDEditor from "@uiw/react-md-editor";
 import { MessageCircle, Pencil, Trash2 } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -12,12 +12,14 @@ import { Input } from "../../../components/ui/input";
 
 const BlogDetailsPage = () => {
   const { id } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const dispatch = useDispatch();
   const blogs = useSelector((state) => state.blogs.items);
   const user = useSelector((state) => state.auth.user);
   const blog = useMemo(() => blogs.find((item) => item.id === id), [blogs, id]);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(searchParams.get("edit") === "1");
   const [content, setContent] = useState("");
   const { register, handleSubmit, reset } = useForm();
 
@@ -59,7 +61,7 @@ const BlogDetailsPage = () => {
 
   const handleDelete = () => {
     dispatch(deleteBlog(blog.id));
-    navigate("/blogs");
+    navigate(location.pathname.startsWith("/dashboard") ? "/dashboard/blogs" : "/blogs");
   };
 
   return (
@@ -109,8 +111,8 @@ const BlogDetailsPage = () => {
         </Card>
       ) : null}
 
-      <Card className="prose prose-invert max-w-none px-6 py-8 dark:prose-invert sm:px-10">
-        <div data-color-mode="dark">
+      <Card className="prose max-w-none px-6 py-8 dark:prose-invert sm:px-10">
+        <div>
           <MDEditor.Markdown source={blog.content} />
         </div>
       </Card>
@@ -121,7 +123,7 @@ const BlogDetailsPage = () => {
         </div>
         <div className="mt-4 space-y-4">
           {["Excellent balance of UX and architecture thinking.", "Would love a deeper section on route ownership."].map((comment) => (
-            <div key={comment} className="rounded-3xl border border-white/8 bg-white/5 px-4 py-3 text-sm text-zinc-600 dark:text-zinc-400">
+            <div key={comment} className="rounded-3xl border border-zinc-300 bg-zinc-50 px-4 py-3 text-sm text-zinc-700 dark:border-white/8 dark:bg-white/5 dark:text-zinc-400">
               {comment}
             </div>
           ))}

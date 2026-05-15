@@ -129,7 +129,7 @@ const ProjectDetailsPage = () => {
             <h2 className="text-sm uppercase tracking-[0.24em] text-zinc-500 dark:text-white/60">Key features</h2>
             <div className="mt-4 grid gap-3">
               {project.features.map((feature) => (
-                <div key={feature} className="rounded-[1.5rem] border border-white/8 bg-white/5 px-4 py-4 text-sm">
+                <div key={feature} className="rounded-[1.5rem] border border-zinc-300 bg-zinc-50 px-4 py-4 text-sm text-zinc-800 dark:border-white/8 dark:bg-white/5 dark:text-zinc-100">
                   {feature}
                 </div>
               ))}
@@ -142,7 +142,7 @@ const ProjectDetailsPage = () => {
             </div>
             <div className="mt-4 space-y-4">
               {["Love the clarity of the story here.", "Great component structure and launch polish."].map((comment) => (
-                <div key={comment} className="rounded-3xl border border-white/8 bg-white/5 px-4 py-3 text-sm text-zinc-600 dark:text-zinc-400">
+                <div key={comment} className="rounded-3xl border border-zinc-300 bg-zinc-50 px-4 py-3 text-sm text-zinc-700 dark:border-white/8 dark:bg-white/5 dark:text-zinc-400">
                   {comment}
                 </div>
               ))}

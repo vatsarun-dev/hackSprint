@@ -77,11 +77,11 @@ const ProjectsPage = () => {
             myProjects.map((project) => (
               <div
                 key={project.id}
-                className="grid gap-4 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-950/60 p-4 sm:grid-cols-[1fr_auto] sm:items-center"
+                className="grid gap-4 rounded-2xl border border-zinc-300 bg-zinc-50 p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-950/60 dark:shadow-none sm:grid-cols-[1fr_auto] sm:items-center"
               >
                 <div>
                   <p className="font-medium">{project.title}</p>
-                  <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">{project.description}</p>
+                  <p className="mt-1 text-sm text-zinc-700 dark:text-zinc-400">{project.description}</p>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <Button variant="secondary" size="sm" onClick={() => navigate(`${projectBasePath}/${project.id}?edit=1`)}>
@@ -96,7 +96,7 @@ const ProjectsPage = () => {
               </div>
             ))
           ) : (
-            <div className="rounded-2xl border border-dashed border-zinc-300 dark:border-zinc-700 p-5 text-sm text-zinc-600 dark:text-zinc-400">
+            <div className="rounded-2xl border border-dashed border-zinc-400 p-5 text-sm text-zinc-700 dark:border-zinc-700 dark:text-zinc-400">
               No projects created by this account yet.
             </div>
           )}

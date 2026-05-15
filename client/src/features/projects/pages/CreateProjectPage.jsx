@@ -87,11 +87,11 @@ const CreateProjectPage = () => {
           <Eye className="h-4 w-4 text-zinc-600 dark:text-white/70" />
           <p className="text-sm font-medium">Realtime preview</p>
         </div>
-        <div className="overflow-hidden rounded-[28px] border border-white/8 bg-white/5">
-          <div className="h-52 bg-[linear-gradient(135deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))]" />
+        <div className="overflow-hidden rounded-[28px] border border-zinc-300 bg-zinc-50 shadow-sm dark:border-white/8 dark:bg-white/5 dark:shadow-none">
+          <div className="h-52 bg-[linear-gradient(135deg,rgba(226,232,240,0.9),rgba(248,250,252,0.6))] dark:bg-[linear-gradient(135deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))]" />
           <div className="p-5">
             <h2 className="text-2xl font-semibold">{preview.title || "Project title preview"}</h2>
-            <p className="mt-3 text-sm text-zinc-600 dark:text-zinc-400">
+            <p className="mt-3 text-sm text-zinc-700 dark:text-zinc-400">
               {preview.description || "Your project description will appear here as you type."}
             </p>
             <div className="mt-4 flex flex-wrap gap-2">

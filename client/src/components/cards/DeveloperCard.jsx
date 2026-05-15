@@ -21,7 +21,7 @@ const DeveloperCard = ({ developer }) => {
               <p className="text-sm text-zinc-600 dark:text-zinc-400">{developer.title}</p>
             </div>
           </div>
-          <span className="rounded-full border border-white/10 bg-white/6 px-3 py-1 text-xs text-zinc-600 dark:text-white/70">
+          <span className="rounded-full border border-zinc-300 bg-zinc-50 px-3 py-1 text-xs text-zinc-700 dark:border-white/10 dark:bg-white/6 dark:text-white/70">
             {developer.followers}
           </span>
         </div>
@@ -29,13 +29,13 @@ const DeveloperCard = ({ developer }) => {
           <Orbit className="h-3.5 w-3.5" />
           Discovery signal
         </div>
-        <p className="mt-4 max-w-md text-sm leading-7 text-zinc-600 dark:text-zinc-400">{developer.bio}</p>
+        <p className="mt-4 max-w-md text-sm leading-7 text-zinc-700 dark:text-zinc-400">{developer.bio}</p>
         <div className="mt-5 flex flex-wrap gap-2">
           {developer.skills.map((skill) => (
             <Badge key={skill}>{skill}</Badge>
           ))}
         </div>
-        <div className="mt-8 flex items-center justify-between border-t border-white/8 pt-5">
+        <div className="mt-8 flex items-center justify-between border-t border-zinc-200 pt-5 dark:border-white/8">
           <Link to={`/profile/${developer.username}`} className="inline-flex items-center gap-2 text-sm font-medium text-zinc-700 dark:text-white/80">
             View profile
             <ArrowUpRight className="h-4 w-4" />

@@ -34,8 +34,8 @@ const ProjectCard = ({ project }) => {
               <Badge key={item}>{item}</Badge>
             ))}
           </div>
-          <div className="mt-6 flex items-center justify-between border-t border-white/8 pt-5">
-            <p className="text-sm text-zinc-600 dark:text-zinc-400">by {project.author.name}</p>
+          <div className="mt-6 flex items-center justify-between border-t border-zinc-200 pt-5 dark:border-white/8">
+            <p className="text-sm text-zinc-700 dark:text-zinc-400">by {project.author.name}</p>
             <span className="inline-flex items-center gap-2 text-sm font-medium text-zinc-700 dark:text-white/80">
               Open
               <ArrowUpRight className="h-4 w-4" />

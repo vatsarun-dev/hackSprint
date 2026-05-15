@@ -1,18 +1,16 @@
-import { BarChart3, BookOpen, FolderKanban, Home, LayoutDashboard, LogOut, Menu, UserRound } from "lucide-react";
+import { ArrowLeft, BookOpen, FolderKanban, LogOut, Menu, UserRound } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleSidebar } from "../../redux/slices/uiSlice";
 import { logoutUser } from "../../redux/slices/authSlice";
 import { cn } from "../../lib/utils";
 import { Button } from "../ui/button";
+import ThemeToggle from "../navbar/ThemeToggle";
 
 const items = [
-  { icon: Home, label: "Home", to: "/dashboard/home" },
-  { icon: LayoutDashboard, label: "Dashboard", to: "/dashboard", end: true },
   { icon: UserRound, label: "My Profile", to: "/profile/edit" },
   { icon: FolderKanban, label: "Projects", to: "/dashboard/projects" },
-  { icon: BookOpen, label: "Blogs", to: "/blogs/write" },
-  { icon: BarChart3, label: "Community", to: "/dashboard/community" },
+  { icon: BookOpen, label: "Blogs", to: "/dashboard/blogs" },
 ];
 
 const AppSidebar = () => {
@@ -23,7 +21,7 @@ const AppSidebar = () => {
   return (
     <aside
       className={cn(
-        "sticky top-0 hidden h-screen flex-col border-r border-white/10 bg-white/4 px-3 py-6 backdrop-blur-2xl lg:flex",
+        "sticky top-0 hidden h-screen flex-col border-r border-zinc-200 bg-white/95 px-3 py-6 shadow-[16px_0_50px_rgba(15,23,42,0.06)] backdrop-blur-2xl dark:border-white/10 dark:bg-zinc-950/70 dark:shadow-none lg:flex",
         collapsed ? "w-24" : "w-72",
       )}
     >
@@ -44,8 +42,8 @@ const AppSidebar = () => {
             end={end}
             className={({ isActive }) =>
               cn(
-                "flex items-center gap-3 rounded-2xl px-4 py-3 text-sm text-zinc-600 dark:text-zinc-400 transition hover:bg-white/8 hover:text-zinc-950 dark:hover:text-zinc-50",
-                isActive && "bg-white text-slate-950 dark:bg-white/12 dark:text-white",
+                "flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-zinc-700 transition hover:bg-zinc-100 hover:text-zinc-950 dark:text-zinc-400 dark:hover:bg-white/8 dark:hover:text-zinc-50",
+                isActive && "bg-zinc-950 text-white shadow-sm dark:bg-white/12 dark:text-white dark:shadow-none",
                 collapsed && "justify-center px-0",
               )
             }
@@ -55,17 +53,27 @@ const AppSidebar = () => {
           </NavLink>
         ))}
       </div>
-      <Button
-        variant="secondary"
-        className="w-full justify-start"
-        onClick={() => {
-          dispatch(logoutUser());
-          navigate("/");
-        }}
-      >
-        <LogOut className="h-4 w-4" />
-        {!collapsed && "Logout"}
-      </Button>
+      <div className={cn("grid gap-2", !collapsed && "grid-cols-2")}>
+        <Button variant="secondary" className={cn("w-full justify-start px-3", collapsed && "justify-center px-0")} onClick={() => navigate("/")}>
+          <ArrowLeft className="h-4 w-4" />
+          {!collapsed && "Back home"}
+        </Button>
+        <Button
+          variant="secondary"
+          className={cn("w-full justify-start px-3", collapsed && "justify-center px-0")}
+          onClick={() => {
+            dispatch(logoutUser());
+            navigate("/");
+          }}
+        >
+          <LogOut className="h-4 w-4" />
+          {!collapsed && "Logout"}
+        </Button>
+        <div className={cn("flex items-center gap-3 rounded-xl border border-zinc-300 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100", !collapsed && "col-span-2", collapsed && "justify-center px-0")}>
+          <ThemeToggle className="h-9 w-9 px-0" />
+          {!collapsed && <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Theme</span>}
+        </div>
+      </div>
     </aside>
   );
 };

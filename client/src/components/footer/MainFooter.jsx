@@ -9,7 +9,7 @@ const links = [
 
 const MainFooter = () => {
   return (
-    <footer className="relative mt-20 border-t border-white/8 bg-white/80 dark:bg-zinc-950/70">
+    <footer className="relative mt-20 border-t border-zinc-200 bg-white/90 dark:border-white/8 dark:bg-zinc-950/70">
       <div className="mx-auto grid max-w-[92rem] gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1.2fr_0.8fr] lg:px-10">
         <div>
           <p className="text-sm uppercase tracking-[0.28em] text-zinc-500 dark:text-white/60">DevConnect</p>
@@ -25,13 +25,13 @@ const MainFooter = () => {
             {links.map(({ label, icon: Icon }) => (
               <button
                 key={label}
-                className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5 text-zinc-600 dark:text-zinc-400 transition hover:-translate-y-0.5 hover:text-zinc-950 dark:hover:text-zinc-50"
+                className="flex h-12 w-12 items-center justify-center rounded-full border border-zinc-300 bg-white text-zinc-700 transition hover:-translate-y-0.5 hover:border-zinc-400 hover:text-zinc-950 dark:border-white/10 dark:bg-white/5 dark:text-zinc-400 dark:hover:text-zinc-50"
               >
                 <Icon className="h-4 w-4" />
               </button>
             ))}
           </div>
-          <p className="text-sm text-zinc-600 dark:text-zinc-400">© 2026 DevConnect. Crafted with premium frontend direction.</p>
+          <p className="text-sm text-zinc-600 dark:text-zinc-400">(c) 2026 DevConnect. Crafted with premium frontend direction.</p>
         </div>
       </div>
     </footer>

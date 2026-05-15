@@ -32,15 +32,24 @@
     @apply min-h-screen;
   }
 
+  .wmde-markdown,
+  .w-md-editor,
+  .w-md-editor-preview {
+    background-color: transparent !important;
+    color: #18181b !important;
+  }
+
   [data-color-mode="dark"] {
     --md-editor-bg-color: transparent;
     --md-editor-text-color: #f4f4f5;
   }
 
-  .wmde-markdown,
-  .w-md-editor,
-  .w-md-editor-preview {
-    background-color: transparent !important;
+  [data-color-mode="dark"] .wmde-markdown,
+  [data-color-mode="dark"] .w-md-editor,
+  [data-color-mode="dark"] .w-md-editor-preview,
+  .dark .wmde-markdown,
+  .dark .w-md-editor,
+  .dark .w-md-editor-preview {
     color: #f4f4f5 !important;
   }
 }
