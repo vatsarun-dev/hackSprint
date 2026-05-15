@@ -9,6 +9,7 @@ import { Input } from "../../../components/ui/input";
 import { Badge } from "../../../components/ui/badge";
 import { Button } from "../../../components/ui/button";
 import ProjectCard from "../../../components/cards/ProjectCard";
+import EmptyState from "../../../components/loaders/EmptyState";
 
 const tags = ["All", "Analytics", "SaaS", "Developer Tools", "Community", "Writing"];
 
@@ -17,6 +18,7 @@ const ProjectsPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const projects = useSelector((state) => state.projects.items);
+  const { loading, error, isBootstrapped } = useSelector((state) => state.projects);
   const user = useSelector((state) => state.auth.user);
   const [query, setQuery] = useState("");
   const [activeTag, setActiveTag] = useState("All");
@@ -24,9 +26,11 @@ const ProjectsPage = () => {
 
   const filteredProjects = useMemo(() => {
     return projects.filter((project) => {
+      const title = project.title || "";
+      const description = project.description || "";
       const matchesQuery =
-        project.title.toLowerCase().includes(debouncedQuery.toLowerCase()) ||
-        project.description.toLowerCase().includes(debouncedQuery.toLowerCase());
+        title.toLowerCase().includes(debouncedQuery.toLowerCase()) ||
+        description.toLowerCase().includes(debouncedQuery.toLowerCase());
       const matchesTag = activeTag === "All" || project.tags?.includes(activeTag);
       return matchesQuery && matchesTag;
     });
@@ -122,11 +126,22 @@ const ProjectsPage = () => {
         </div>
       </Card>
       <section className="columns-1 gap-6 md:columns-2 xl:columns-3">
-        {filteredProjects.map((project) => (
-          <div key={project.id} className="mb-6 break-inside-avoid">
-            <ProjectCard project={project} />
-          </div>
-        ))}
+        {loading && !isBootstrapped ? (
+          <EmptyState title="Loading projects" description="Fetching project showcases from the backend." />
+        ) : error ? (
+          <EmptyState title="Projects could not load" description={error} />
+        ) : filteredProjects.length ? (
+          filteredProjects.map((project) => (
+            <div key={project.id} className="mb-6 break-inside-avoid">
+              <ProjectCard project={project} />
+            </div>
+          ))
+        ) : (
+          <EmptyState
+            title="No projects found"
+            description="Create the first project or try a broader search/filter."
+          />
+        )}
       </section>
     </div>
   );

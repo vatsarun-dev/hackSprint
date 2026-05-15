@@ -4,7 +4,8 @@ import { mapProject, unwrapApiData } from "./mappers";
 export const projectService = {
   async getAll() {
     const response = await apiClient.get("/project");
-    return unwrapApiData(response).map(mapProject);
+    const projects = unwrapApiData(response);
+    return Array.isArray(projects) ? projects.map(mapProject) : [];
   },
   async create(payload) {
     const response = await apiClient.post("/project", payload, {

@@ -6,6 +6,8 @@ import { Card } from "../ui/card";
 const ProjectCard = ({ project }) => {
   const location = useLocation();
   const projectBasePath = location.pathname.startsWith("/dashboard") ? "/dashboard/projects" : "/projects";
+  const tags = project.tags || [];
+  const techStack = project.techStack || [];
 
   return (
     <Link to={`${projectBasePath}/${project.id}`} className="block h-full">
@@ -15,7 +17,7 @@ const ProjectCard = ({ project }) => {
           <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(7,11,20,0.9))]" />
           <div className="absolute left-5 right-5 top-5 flex items-center justify-between">
             <span className="rounded-full border border-white/12 bg-[rgba(7,11,20,0.55)] px-3 py-1 text-[11px] uppercase tracking-[0.22em] text-white/70 backdrop-blur-xl">
-              {project.tags[0]}
+              {tags[0] || "Project"}
             </span>
             <span className="inline-flex items-center gap-1 rounded-full border border-white/12 bg-[rgba(7,11,20,0.55)] px-3 py-1 text-xs text-white/75 backdrop-blur-xl">
               <Heart className="h-4 w-4" />
@@ -30,7 +32,7 @@ const ProjectCard = ({ project }) => {
         <div className="p-5">
           <p className="text-sm leading-7 text-zinc-600 dark:text-zinc-400">{project.description}</p>
           <div className="mt-5 flex flex-wrap gap-2">
-            {project.techStack.map((item) => (
+            {techStack.map((item) => (
               <Badge key={item}>{item}</Badge>
             ))}
           </div>
