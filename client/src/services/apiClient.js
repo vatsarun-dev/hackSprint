@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:4000/api",
+  baseURL: import.meta.env.VITE_API_BASE_URL || "https://hacksprint-r6t3.onrender.com/api",
   timeout: 10000,
   withCredentials: true,
 });
