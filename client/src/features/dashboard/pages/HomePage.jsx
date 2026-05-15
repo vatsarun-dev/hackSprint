@@ -253,34 +253,46 @@ const HomePage = () => {
               A living constellation of developers, not a directory grid.
             </h2>
           </div>
-          <Card data-reveal className="relative min-h-[34rem] overflow-hidden p-6 sm:p-8">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.07),transparent_28%),radial-gradient(circle_at_80%_50%,rgba(255,255,255,0.05),transparent_25%)]" />
-            <div className="relative h-full">
-              <div className="absolute left-[8%] top-[12%] flex items-center gap-3 rounded-full border border-white/10 bg-white/6 px-4 py-3 backdrop-blur-xl">
-                <img src={developers[0].avatar} alt={developers[0].name} className="h-12 w-12 rounded-full object-cover" />
+          <Card data-reveal className="relative overflow-hidden p-6 sm:p-8">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_18%,rgba(255,255,255,0.07),transparent_30%),radial-gradient(circle_at_78%_68%,rgba(255,255,255,0.05),transparent_28%)]" />
+            <div className="relative grid gap-6">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <p className="text-sm font-medium">{developers[0].name}</p>
-                  <p className="text-xs text-zinc-600 dark:text-zinc-400">{developers[0].skills.join(" / ")}</p>
+                  <p className="text-xs uppercase tracking-[0.24em] text-zinc-500 dark:text-white/60">Network map</p>
+                  <h3 className="mt-3 text-2xl font-semibold">Creators connected by shared craft.</h3>
+                </div>
+                <div className="w-fit rounded-full border border-zinc-200 bg-white/80 px-4 py-2 text-xs text-zinc-600 backdrop-blur-xl dark:border-white/10 dark:bg-white/6 dark:text-white/70">
+                  28 live connections
                 </div>
               </div>
-              <div className="absolute right-[10%] top-[28%] flex items-center gap-3 rounded-full border border-white/10 bg-white/6 px-4 py-3 backdrop-blur-xl">
-                <img src={developers[1].avatar} alt={developers[1].name} className="h-12 w-12 rounded-full object-cover" />
-                <div>
-                  <p className="text-sm font-medium">{developers[1].name}</p>
-                  <p className="text-xs text-zinc-600 dark:text-zinc-400">{developers[1].skills.join(" / ")}</p>
+
+              <div className="relative grid gap-4 overflow-hidden rounded-[2rem] border border-zinc-200 bg-zinc-50/80 p-4 dark:border-white/10 dark:bg-white/5 sm:p-5">
+                <div className="pointer-events-none absolute left-8 right-8 top-1/2 hidden h-px bg-[linear-gradient(90deg,transparent,rgba(113,113,122,0.4),transparent)] dark:bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.24),transparent)] md:block" />
+                <div className="pointer-events-none absolute bottom-8 left-1/2 top-8 hidden w-px bg-[linear-gradient(180deg,transparent,rgba(113,113,122,0.28),transparent)] dark:bg-[linear-gradient(180deg,transparent,rgba(255,255,255,0.18),transparent)] md:block" />
+
+                <div className="relative grid gap-4 md:grid-cols-2">
+                  {developers.slice(0, 4).map((developer, index) => (
+                    <Link
+                      key={developer.id}
+                      to={`/profile/${developer.username}`}
+                      className={`group flex min-w-0 items-center gap-4 rounded-2xl border border-zinc-200 bg-white/85 p-4 text-left shadow-[0_14px_34px_rgba(15,23,42,0.08)] transition hover:-translate-y-0.5 hover:border-zinc-300 dark:border-white/10 dark:bg-zinc-950/60 dark:shadow-none dark:hover:border-white/20 ${
+                        index === 1 ? "md:translate-y-8" : ""
+                      } ${index === 2 ? "md:-translate-y-2" : ""} ${index === 3 ? "md:translate-y-6" : ""}`}
+                    >
+                      <img
+                        src={developer.avatar}
+                        alt={developer.name}
+                        className="h-14 w-14 shrink-0 rounded-2xl object-cover"
+                      />
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-semibold">{developer.name}</p>
+                        <p className="mt-1 line-clamp-2 text-xs leading-5 text-zinc-600 dark:text-zinc-400">
+                          {developer.skills.join(" / ")}
+                        </p>
+                      </div>
+                    </Link>
+                  ))}
                 </div>
-              </div>
-              <div className="absolute bottom-[12%] left-[18%] flex items-center gap-3 rounded-full border border-white/10 bg-white/6 px-4 py-3 backdrop-blur-xl">
-                <img src={developers[2].avatar} alt={developers[2].name} className="h-12 w-12 rounded-full object-cover" />
-                <div>
-                  <p className="text-sm font-medium">{developers[2].name}</p>
-                  <p className="text-xs text-zinc-600 dark:text-zinc-400">{developers[2].skills.join(" / ")}</p>
-                </div>
-              </div>
-              <div className="absolute left-[27%] top-[29%] h-px w-[42%] bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.28),transparent)]" />
-              <div className="absolute left-[32%] top-[48%] h-px w-[36%] rotate-[28deg] bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent)]" />
-              <div className="absolute left-[39%] top-[34%] rounded-full border border-zinc-200 bg-white/80 px-3 py-1 text-xs text-zinc-600 dark:border-white/10 dark:bg-white/6 dark:text-white/70">
-                28 live connections
               </div>
             </div>
           </Card>

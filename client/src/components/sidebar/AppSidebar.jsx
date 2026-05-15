@@ -1,4 +1,4 @@
-import { BarChart3, BookOpen, FolderKanban, LayoutDashboard, LogOut, Menu, Settings, UserRound } from "lucide-react";
+import { BarChart3, BookOpen, FolderKanban, LayoutDashboard, LogOut, Menu, UserRound } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleSidebar } from "../../redux/slices/uiSlice";
@@ -9,10 +9,9 @@ import { Button } from "../ui/button";
 const items = [
   { icon: LayoutDashboard, label: "Dashboard", to: "/dashboard" },
   { icon: UserRound, label: "My Profile", to: "/profile/edit" },
-  { icon: FolderKanban, label: "Projects", to: "/projects" },
+  { icon: FolderKanban, label: "Projects", to: "/dashboard/projects" },
   { icon: BookOpen, label: "Blogs", to: "/blogs/write" },
-  { icon: BarChart3, label: "Community", to: "/developers" },
-  { icon: Settings, label: "Settings", to: "/settings" },
+  { icon: BarChart3, label: "Community", to: "/dashboard/community" },
 ];
 
 const AppSidebar = () => {

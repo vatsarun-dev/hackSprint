@@ -1,11 +1,14 @@
 import { ArrowUpRight, Heart } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Badge } from "../ui/badge";
 import { Card } from "../ui/card";
 
 const ProjectCard = ({ project }) => {
+  const location = useLocation();
+  const projectBasePath = location.pathname.startsWith("/dashboard") ? "/dashboard/projects" : "/projects";
+
   return (
-    <Link to={`/projects/${project.id}`} className="block h-full">
+    <Link to={`${projectBasePath}/${project.id}`} className="block h-full">
       <Card className="group h-full overflow-hidden p-0 transition duration-500 hover:-translate-y-1">
         <div className="relative overflow-hidden">
           <img src={project.image} alt={project.title} className="h-64 w-full object-cover transition duration-700 group-hover:scale-[1.04]" />

@@ -1,19 +1,18 @@
-import { BookOpen, FolderKanban, Home, Search, Settings } from "lucide-react";
+import { BookOpen, FolderKanban, Home, Search } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { cn } from "../../lib/utils";
 
 const items = [
   { to: "/dashboard", icon: Home, label: "Home" },
-  { to: "/developers", icon: Search, label: "Community" },
-  { to: "/projects", icon: FolderKanban, label: "Projects" },
+  { to: "/dashboard/community", icon: Search, label: "Community" },
+  { to: "/dashboard/projects", icon: FolderKanban, label: "Projects" },
   { to: "/blogs/write", icon: BookOpen, label: "Write" },
-  { to: "/settings", icon: Settings, label: "Settings" },
 ];
 
 const MobileBottomNav = () => {
   return (
     <div className="fixed inset-x-0 bottom-4 z-50 px-4 lg:hidden">
-      <div className="mx-auto grid max-w-lg grid-cols-5 rounded-[28px] border border-white/10 bg-white/90 dark:bg-zinc-900/90 p-2 shadow-[0_24px_70px_rgba(15,23,42,0.28)] backdrop-blur-2xl">
+      <div className="mx-auto grid max-w-lg grid-cols-4 rounded-[28px] border border-white/10 bg-white/90 p-2 shadow-[0_24px_70px_rgba(15,23,42,0.28)] backdrop-blur-2xl dark:bg-zinc-900/90">
         {items.map(({ to, icon: Icon, label }) => (
           <NavLink
             key={to}

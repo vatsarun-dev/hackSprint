@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Code2, ExternalLink, MessageSquare, Pencil, Trash2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { deleteProject, updateProject } from "../../../redux/slices/projectsSlice";
@@ -15,6 +15,7 @@ const ProjectDetailsPage = () => {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
   const projects = useSelector((state) => state.projects.items);
   const user = useSelector((state) => state.auth.user);
@@ -46,6 +47,7 @@ const ProjectDetailsPage = () => {
   }
 
   const canManage = user?.username && project.author?.username === user.username;
+  const projectBasePath = location.pathname.startsWith("/dashboard") ? "/dashboard/projects" : "/projects";
 
   const onUpdate = async (values) => {
     const nextImage = (await fileToDataUrl(values.image?.[0])) || project.image;
@@ -69,7 +71,7 @@ const ProjectDetailsPage = () => {
 
   const handleDelete = () => {
     dispatch(deleteProject(project.id));
-    navigate("/projects");
+    navigate(projectBasePath);
   };
 
   return (

@@ -20,7 +20,6 @@ const ProfilePage = lazy(() => import("../features/profile/pages/ProfilePage"));
 const EditProfilePage = lazy(() => import("../features/profile/pages/EditProfilePage"));
 const DashboardHomePage = lazy(() => import("../features/dashboard/pages/DashboardHomePage"));
 const CommunityPage = lazy(() => import("../features/community/pages/CommunityPage"));
-const SettingsPage = lazy(() => import("../features/dashboard/pages/SettingsPage"));
 
 const withSuspense = (Component) => (
   <Suspense fallback={<PageLoader label="Loading page experience" />}>
@@ -61,9 +60,11 @@ export const router = createBrowserRouter([
         children: [
           { path: "/dashboard", element: withSuspense(DashboardHomePage) },
           { path: "/profile/edit", element: withSuspense(EditProfilePage) },
+          { path: "/dashboard/projects", element: withSuspense(ProjectsPage) },
+          { path: "/dashboard/projects/:id", element: withSuspense(ProjectDetailsPage) },
           { path: "/projects/create", element: withSuspense(CreateProjectPage) },
           { path: "/blogs/write", element: withSuspense(WriteBlogPage) },
-          { path: "/settings", element: withSuspense(SettingsPage) },
+          { path: "/dashboard/community", element: withSuspense(CommunityPage) },
         ],
       },
     ],

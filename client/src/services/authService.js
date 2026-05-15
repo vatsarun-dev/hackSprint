@@ -20,11 +20,13 @@ export const authService = {
   },
   async signup(payload) {
     await delay(1100);
+    const fallbackName = payload.email?.split("@")[0] || "devbuilder";
+    const displayName = payload.name || fallbackName;
     return {
       id: "user-2",
-      username: payload.username,
+      username: displayName.toLowerCase().trim().replace(/\s+/g, "-"),
       email: payload.email,
-      name: payload.name || payload.username,
+      name: displayName,
       title: "Product-minded Developer",
       location: "India",
       bio: "I am shaping my developer profile and collecting my best projects in one place.",

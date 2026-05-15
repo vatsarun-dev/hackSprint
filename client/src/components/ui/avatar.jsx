@@ -5,7 +5,9 @@ export const Avatar = ({ className, ...props }) => (
   <AvatarPrimitive.Root className={cn("relative flex h-12 w-12 shrink-0 overflow-hidden rounded-2xl", className)} {...props} />
 );
 
-export const AvatarImage = AvatarPrimitive.Image;
+export const AvatarImage = ({ className, ...props }) => (
+  <AvatarPrimitive.Image className={cn("h-full w-full object-cover", className)} {...props} />
+);
 
 export const AvatarFallback = ({ className, ...props }) => (
   <AvatarPrimitive.Fallback

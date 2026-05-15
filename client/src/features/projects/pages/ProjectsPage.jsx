@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Pencil, Plus, Search, Trash2 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteProject } from "../../../redux/slices/projectsSlice";
 import { useDebounce } from "../../../hooks/useDebounce";
@@ -15,6 +15,7 @@ const tags = ["All", "Analytics", "SaaS", "Developer Tools", "Community", "Writi
 const ProjectsPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const projects = useSelector((state) => state.projects.items);
   const user = useSelector((state) => state.auth.user);
   const [query, setQuery] = useState("");
@@ -39,6 +40,8 @@ const ProjectsPage = () => {
   const handleDelete = (projectId) => {
     dispatch(deleteProject(projectId));
   };
+
+  const projectBasePath = location.pathname.startsWith("/dashboard") ? "/dashboard/projects" : "/projects";
 
   return (
     <div className="space-y-10">
@@ -81,7 +84,7 @@ const ProjectsPage = () => {
                   <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">{project.description}</p>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  <Button variant="secondary" size="sm" onClick={() => navigate(`/projects/${project.id}?edit=1`)}>
+                  <Button variant="secondary" size="sm" onClick={() => navigate(`${projectBasePath}/${project.id}?edit=1`)}>
                     <Pencil className="h-4 w-4" />
                     Edit
                   </Button>

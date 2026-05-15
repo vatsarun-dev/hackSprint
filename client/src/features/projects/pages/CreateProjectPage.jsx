@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Eye } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { createProject } from "../../../redux/slices/projectsSlice";
@@ -20,6 +20,7 @@ const CreateProjectPage = () => {
   const [submitting, setSubmitting] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const user = useSelector((state) => state.auth.user);
 
   const previewRegister = (name, options = {}) =>
@@ -56,7 +57,8 @@ const CreateProjectPage = () => {
     dispatch(createProject(project));
     reset();
     setSubmitting(false);
-    navigate(`/projects/${project.id}`);
+    const projectBasePath = location.pathname.startsWith("/dashboard") ? "/dashboard/projects" : "/projects";
+    navigate(`${projectBasePath}/${project.id}`);
   };
 
   return (

@@ -12,7 +12,7 @@ const DeveloperCard = ({ developer }) => {
       <div className="relative p-6">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-4">
-            <Avatar className="h-16 w-16 rounded-[1.4rem]">
+            <Avatar className="h-16 w-16 rounded-full border border-zinc-200 dark:border-white/10">
               <AvatarImage src={developer.avatar} alt={developer.name} />
               <AvatarFallback>{developer.name.slice(0, 2)}</AvatarFallback>
             </Avatar>
