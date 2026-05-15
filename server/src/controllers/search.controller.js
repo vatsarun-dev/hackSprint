@@ -1,10 +1,10 @@
+import asyncHandler from "../middlewares/async.handler.js";
 import {
 	searchBlogsService,
 	searchProjectsService,
 	searchUsersService,
 } from "../services/search.service.js";
-import { ApiResponse } from "../utils/ApiResponse.js";
-import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiResponse } from "../utils/apiResponse.js";
 
 export const searchUser = asyncHandler(async (req, res) => {
 	const users = await searchUsersService(req.query);

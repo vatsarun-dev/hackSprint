@@ -6,6 +6,7 @@ import {
 	logoutUserService,
 	refreshTokenService,
 	registerUserService,
+	updateProfileService,
 } from "../services/user.service.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 import { accessTokenOptions, refreshTokenOptions } from "../utils/cookie.js";
@@ -50,13 +51,13 @@ export const getMe = asyncHandler(async (req, res) => {
 });
 
 export const getUser = asyncHandler(async (req, res) => {
-	const user = await getUserService(req.params.id);
+	const user = await getUserService(req.params.username);
 	return res.status(200).json(new ApiResponse(200, "User data fetched", user));
 });
 
 export const logoutUser = asyncHandler(async (req, res) => {
 	await logoutUserService(req.user?.id);
-	console.log('inside logout controller');
+	console.log("inside logout controller");
 
 	res.clearCookie("accessToken");
 	res.clearCookie("refreshToken");
@@ -64,4 +65,11 @@ export const logoutUser = asyncHandler(async (req, res) => {
 	return res
 		.status(200)
 		.json(new ApiResponse(200, "User logged out successfully"));
+});
+
+export const updateProfile = asyncHandler(async (req, res) => {
+	const user = await updateProfileService(req.user?.id, req.body, req.files);
+	return res
+		.status(200)
+		.json(new ApiResponse(200, "User profile updated", user));
 });

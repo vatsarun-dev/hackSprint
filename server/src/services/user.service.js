@@ -2,13 +2,23 @@ import User from "../models/user.model.js";
 import { ApiError } from "../utils/apiError.js";
 import { decodeRefreshToken } from "../utils/jwt.js";
 import { generateAccessToken, generateRefreshToken } from "../utils/token.js";
+import uploadToImagekit from "../utils/uploadToImagekit.js";
 import {
 	loginValidator,
 	registerValidator,
 } from "../validators/user.validator.js";
 
 export const registerUserService = async (data) => {
-	const { name, email, password } = registerValidator(data);
+	const {
+		name,
+		email,
+		password,
+		bio,
+		skills,
+		profilePicture,
+		banner,
+		description,
+	} = registerValidator(data);
 
 	const user = await User.findOne({ email });
 
@@ -20,6 +30,11 @@ export const registerUserService = async (data) => {
 		name,
 		email,
 		password,
+		bio,
+		skills,
+		profilePicture,
+		banner,
+		description,
 	});
 
 	const accessToken = generateAccessToken(newUser._id);
@@ -92,14 +107,15 @@ export const getMeService = async (userId) => {
 	return user;
 };
 
-export const getUserService = async (userId) => {
-	const user = await User.findById(userId);
+export const getUserService = async (username) => {
+	const user = await User.findOne({ username }).select(
+		"-password -refreshToken",
+	);
 	if (!user) {
 		throw new ApiError(404, "User not found");
 	}
 	return user;
 };
-
 
 export const logoutUserService = async (userId) => {
 	const user = await User.findById(userId);
@@ -111,4 +127,28 @@ export const logoutUserService = async (userId) => {
 	user.refreshToken = "";
 
 	await user.save();
+};
+
+export const updateProfileService = async (userId, data, files) => {
+	const user = await User.findById(userId);
+	if (!user) {
+		throw new ApiError(404, "User not found");
+	}
+
+	Object.assign(user, data); // puts all data to user
+
+	if (files.profilePicture?.[0]) {
+		const profileUrl = await uploadToImagekit(files.profilePicture[0]);
+
+		user.profilePicture = profileUrl;
+	}
+
+	if (files.banner?.[0]) {
+		const bannerUrl = await uploadToImagekit(files.banner[0]);
+
+		user.banner = bannerUrl;
+	}
+
+	await user.save();
+	return user;
 };

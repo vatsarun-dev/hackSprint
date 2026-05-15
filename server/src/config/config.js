@@ -10,5 +10,8 @@ const config = {
 	node_env: process.env.NODE_ENV || "development",
 	origin: process.env.ORIGIN || "",
 	origin_prod: process.env.ORIGIN_PROD || "",
+	imagekit_public_key: process.env.IMAGEKIT_PUBLIC_KEY || "",
+	imagekit_private_key: process.env.IMAGEKIT_PRIVATE_KEY || "",
+	imagekit_url_endpoint: process.env.IMAGEKIT_URL_ENDPOINT || "",
 };
 export default config;
