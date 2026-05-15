@@ -1,6 +1,22 @@
 import Blog from "../models/blog.model.js";
+import { ApiError } from "../utils/apiError.js";
 import uploadToImagekit from "../utils/uploadToImagekit.js";
 import { createBlogValidator } from "../validators/blog.validator.js";
+
+const normalizeList = (value) => {
+	if (Array.isArray(value)) {
+		return value.filter(Boolean);
+	}
+
+	if (typeof value === "string") {
+		return value
+			.split(",")
+			.map((item) => item.trim())
+			.filter(Boolean);
+	}
+
+	return [];
+};
 
 export const createBlogService = async (data, userId, file) => {
 	const { title, content, category, tags } = createBlogValidator(data);
@@ -16,9 +32,10 @@ export const createBlogService = async (data, userId, file) => {
 		content,
 		author: userId,
 		category,
-		tags,
-		coverImage: coverImageUrl,
+		tags: normalizeList(tags),
+		coverImage: coverImageUrl || data.coverImage || data.cover,
 	});
+	await newBlog.populate("author", "name username profilePicture description");
 	return newBlog;
 };
 
@@ -48,7 +65,10 @@ export const updateBlogService = async (id, data, userId, file) => {
 		throw new ApiError(403, "Unauthorized");
 	}
 
-	Object.assign(blog, data);
+	Object.assign(blog, {
+		...data,
+		tags: normalizeList(data.tags),
+	});
 
 	if (file) {
 		const coverImageUrl = await uploadToImagekit(file);
@@ -56,6 +76,7 @@ export const updateBlogService = async (id, data, userId, file) => {
 	}
 
 	await blog.save();
+	await blog.populate("author", "name username profilePicture description");
 
 	return blog;
 };

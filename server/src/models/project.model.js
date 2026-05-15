@@ -27,6 +27,22 @@ const projectSchema = new mongoose.Schema(
 				trim: true,
 			},
 		],
+		features: [
+			{
+				type: String,
+				trim: true,
+			},
+		],
+		tags: [
+			{
+				type: String,
+				trim: true,
+			},
+		],
+		likes: {
+			type: Number,
+			default: 0,
+		},
 		githubUrl: {
 			type: String,
 			trim: true,
@@ -42,6 +58,18 @@ const projectSchema = new mongoose.Schema(
 	},
 	{
 		timestamps: true,
+		toJSON: {
+			transform: (_doc, ret) => {
+				ret.id = ret.slug || ret._id.toString();
+				ret.databaseId = ret._id.toString();
+				ret.image = ret.thumbnail;
+				ret.github = ret.githubUrl;
+				ret.live = ret.liveUrl;
+				delete ret._id;
+				delete ret.__v;
+				return ret;
+			},
+		},
 	},
 );
 

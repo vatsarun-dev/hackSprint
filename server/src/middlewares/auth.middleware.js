@@ -18,8 +18,7 @@ const authMiddleware = async (req, res, next) => {
 
 		next();
 	} catch (error) {
-		console.log("Error in middleware:", error);
-		throw new ApiError(401, "UnAuthorized");
+		next(error instanceof ApiError ? error : new ApiError(401, "UnAuthorized"));
 	}
 };
 

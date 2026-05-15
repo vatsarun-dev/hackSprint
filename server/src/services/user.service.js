@@ -137,18 +137,39 @@ export const updateProfileService = async (userId, data, files) => {
 		throw new ApiError(404, "User not found");
 	}
 
-	Object.assign(user, data); // puts all data to user
+	const { title, location, summary, avatar, cover, skills, ...profileData } = data;
 
-	if (files.profilePicture?.[0]) {
+	Object.assign(user, {
+		...profileData,
+		skills:
+			typeof skills === "string"
+				? skills
+						.split(",")
+						.map((item) => item.trim())
+						.filter(Boolean)
+				: skills || user.skills,
+		description: {
+			...user.description,
+			title: title ?? user.description?.title,
+			location: location ?? user.description?.location,
+			summary: summary ?? user.description?.summary,
+		},
+	});
+
+	if (files?.profilePicture?.[0]) {
 		const profileUrl = await uploadToImagekit(files.profilePicture[0]);
 
 		user.profilePicture = profileUrl;
+	} else if (avatar) {
+		user.profilePicture = avatar;
 	}
 
-	if (files.banner?.[0]) {
+	if (files?.banner?.[0]) {
 		const bannerUrl = await uploadToImagekit(files.banner[0]);
 
 		user.banner = bannerUrl;
+	} else if (cover) {
+		user.banner = cover;
 	}
 
 	await user.save();

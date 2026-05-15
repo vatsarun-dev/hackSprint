@@ -92,6 +92,21 @@ const userSchema = new mongoose.Schema(
 	},
 	{
 		timestamps: true,
+		toJSON: {
+			transform: (_doc, ret) => {
+				ret.id = ret._id.toString();
+				ret.avatar = ret.profilePicture;
+				ret.cover = ret.banner;
+				ret.title = ret.description?.title || "";
+				ret.location = ret.description?.location || "";
+				ret.bio = ret.bio || ret.description?.summary || "";
+				delete ret._id;
+				delete ret.__v;
+				delete ret.password;
+				delete ret.refreshToken;
+				return ret;
+			},
+		},
 	},
 );
 

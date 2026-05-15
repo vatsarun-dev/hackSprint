@@ -38,7 +38,7 @@ export const searchProjectsService = async (queryParams) => {
 	}
 
 	return await Project.find(query)
-		.populate("author", "name email")
+		.populate("author", "name username email profilePicture description")
 };
 
 export const searchBlogsService = async (queryParams) => {
@@ -54,6 +54,6 @@ export const searchBlogsService = async (queryParams) => {
 	}
 
 	return await Blog.find(query)
-		.populate("author", "name email")
+		.populate("author", "name username email profilePicture description")
 		.sort({ createdAt: -1 });
 };

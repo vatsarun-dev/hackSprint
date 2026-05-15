@@ -38,6 +38,16 @@ const blogSchema = new mongoose.Schema(
 	},
 	{
 		timestamps: true,
+		toJSON: {
+			transform: (_doc, ret) => {
+				ret.id = ret.slug || ret._id.toString();
+				ret.databaseId = ret._id.toString();
+				ret.cover = ret.coverImage;
+				delete ret._id;
+				delete ret.__v;
+				return ret;
+			},
+		},
 	},
 );
 
