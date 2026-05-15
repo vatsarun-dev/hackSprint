@@ -20,8 +20,8 @@ export const getAllBlogsService = async () => {
 	return Blog.find().populate("author", "name email");
 };
 
-export const getSingleBlogService = async (id) => {
-	const blog = await Blog.findById(id).populate("author", "name email");
+export const getSingleBlogService = async (slug) => {
+	const blog = await Blog.findOne({ slug }).populate("author", "name email");
 
 	if (!blog) {
 		throw new ApiError(404, "Blog not found");

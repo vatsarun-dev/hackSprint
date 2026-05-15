@@ -21,7 +21,7 @@ export const getAllBlogs = asyncHandler(async (req, res) => {
 });
 
 export const getSingleBlog = asyncHandler(async (req, res) => {
-	const blog = await getSingleBlogService(req.params.id);
+	const blog = await getSingleBlogService(req.params.slug);
 	return res.status(200).json(new ApiResponse(200, "Blog found", blog));
 });
 

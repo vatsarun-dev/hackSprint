@@ -19,7 +19,7 @@ router.get("/health", (_req, res) => {
 
 router.post("/", authMiddleware, createBlog);
 router.get("/", getAllBlogs);
-router.get("/:id", getSingleBlog);
+router.get("/:slug", getSingleBlog);
 router.patch("/:id", authMiddleware, updateBlog);
 router.delete("/:id", authMiddleware, deleteBlog);
 
