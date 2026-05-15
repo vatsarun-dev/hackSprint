@@ -45,6 +45,8 @@ const projectSchema = new mongoose.Schema(
 	},
 );
 
+projectSchema.index({ title: "text" });
+
 projectSchema.pre("save", async function () {
 	if (!this.isModified("title")) {
 		return;

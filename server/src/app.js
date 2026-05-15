@@ -6,6 +6,7 @@ import config from "./config/config.js";
 import errorHandler from "./middlewares/error.handler.js";
 import blogRoute from "./routes/blog.route.js";
 import projectRoute from "./routes/project.route.js";
+import searchRoute from "./routes/search.route.js";
 import userRoute from "./routes/user.route.js";
 
 const app = express();
@@ -26,6 +27,7 @@ app.get("/", (req, res) => {
 app.use("/api/user", userRoute);
 app.use("/api/blog", blogRoute);
 app.use("/api/project", projectRoute);
+app.use("/api/search", searchRoute);
 
 app.use(errorHandler);
 
