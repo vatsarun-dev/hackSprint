@@ -9,7 +9,7 @@ import {
 import { ApiResponse } from "../utils/apiResponse.js";
 
 export const createBlog = asyncHandler(async (req, res) => {
-	const newBlog = await createBlogService(req.body,req.user.id);
+	const newBlog = await createBlogService(req.body, req.user.id, req.file);
 	return res
 		.status(201)
 		.json(new ApiResponse(201, "Blog created successfully", newBlog));
@@ -26,7 +26,7 @@ export const getSingleBlog = asyncHandler(async (req, res) => {
 });
 
 export const updateBlog = asyncHandler(async (req, res) => {
-	const blog = await updateBlogService(req.params.id, req.body, req.user.id);
+	const blog = await updateBlogService(req.params.id, req.body, req.user.id, req.file);
 	return res.status(200).json(new ApiResponse(200, "Blog updated", blog));
 });
 

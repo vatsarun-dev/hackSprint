@@ -1,9 +1,15 @@
 import Blog from "../models/blog.model.js";
+import uploadToImagekit from "../utils/uploadToImagekit.js";
 import { createBlogValidator } from "../validators/blog.validator.js";
 
-export const createBlogService = async (data, userId) => {
-	const { title, content, category, tags, coverImage } =
-		createBlogValidator(data);
+export const createBlogService = async (data, userId, file) => {
+	const { title, content, category, tags } = createBlogValidator(data);
+
+	let coverImageUrl = "";
+
+	if (file) {
+		coverImageUrl = await uploadToImagekit(file);
+	}
 
 	const newBlog = await Blog.create({
 		title,
@@ -11,7 +17,7 @@ export const createBlogService = async (data, userId) => {
 		author: userId,
 		category,
 		tags,
-		coverImage,
+		coverImage: coverImageUrl,
 	});
 	return newBlog;
 };
@@ -30,7 +36,7 @@ export const getSingleBlogService = async (slug) => {
 	return blog;
 };
 
-export const updateBlogService = async (id, data, userId) => {
+export const updateBlogService = async (id, data, userId, file) => {
 	const blog = await Blog.findById(id);
 
 	if (!blog) {
@@ -43,6 +49,11 @@ export const updateBlogService = async (id, data, userId) => {
 	}
 
 	Object.assign(blog, data);
+
+	if (file) {
+		const coverImageUrl = await uploadToImagekit(file);
+		blog.coverImage = coverImageUrl;
+	}
 
 	await blog.save();
 

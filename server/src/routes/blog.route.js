@@ -7,6 +7,7 @@ import {
 	updateBlog,
 } from "../controllers/blog.controller.js";
 import authMiddleware from "../middlewares/auth.middleware.js";
+import upload from "../middlewares/multer.middleware.js";
 
 const router = Router();
 
@@ -15,12 +16,10 @@ router.get("/health", (_req, res) => {
 	res.send("blog route is running");
 });
 
-//change getsingle blog to get blog by slug
-
-router.post("/", authMiddleware, createBlog);
+router.post("/", authMiddleware, upload.single("coverImage"), createBlog);
 router.get("/", getAllBlogs);
 router.get("/:slug", getSingleBlog);
-router.patch("/:id", authMiddleware, updateBlog);
+router.patch("/:id", authMiddleware, upload.single("coverImage"), updateBlog);
 router.delete("/:id", authMiddleware, deleteBlog);
 
 export default router;
