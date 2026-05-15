@@ -1,12 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { Code2, Download, Link2, MapPin, Share2 } from "lucide-react";
+import { Code2, Link2, MapPin, Share2 } from "lucide-react";
 import { developers, profileSections } from "../../../lib/mock-data";
 import { userService } from "../../../services/userService";
 import { Avatar, AvatarFallback, AvatarImage } from "../../../components/ui/avatar";
 import { Badge } from "../../../components/ui/badge";
-import { Button } from "../../../components/ui/button";
 import { Card } from "../../../components/ui/card";
 import ProjectCard from "../../../components/cards/ProjectCard";
 import BlogCard from "../../../components/cards/BlogCard";
@@ -118,10 +117,6 @@ const ProfilePage = () => {
                 </div>
               </div>
             </div>
-            <div className="flex flex-wrap gap-3">
-              <Button variant="secondary">Follow</Button>
-              <Button>Connect</Button>
-            </div>
           </div>
           <div className="mt-8 grid gap-6 border-t border-white/8 pt-6 lg:grid-cols-[1fr_0.65fr]">
             <p className="max-w-2xl text-sm leading-7 text-zinc-600 dark:text-zinc-400">{developer.bio}</p>
@@ -151,15 +146,6 @@ const ProfilePage = () => {
               {(developer.skills?.length ? developer.skills : profileSections.skills).map((skill) => (
                 <Badge key={skill}>{skill}</Badge>
               ))}
-            </div>
-          </Card>
-          <Card>
-            <div className="flex items-center justify-between">
-              <h2 className="text-sm uppercase tracking-[0.24em] text-zinc-500 dark:text-white/60">Resume</h2>
-              <Button variant="secondary" size="sm">
-                <Download className="h-4 w-4" />
-                Download
-              </Button>
             </div>
           </Card>
         </div>

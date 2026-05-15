@@ -1,57 +1,18 @@
-import { useEffect, useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  useLocation,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
-import {
-  Code2,
-  ExternalLink,
-  MessageSquare,
-  Pencil,
-  Trash2,
-} from "lucide-react";
-import { useForm } from "react-hook-form";
-import {
-  deleteProject,
-  updateProject,
-} from "../../../redux/slices/projectsSlice";
+import { useMemo } from "react";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { Code2, ExternalLink } from "lucide-react";
 import { Badge } from "../../../components/ui/badge";
 import { Button } from "../../../components/ui/button";
 import { Card } from "../../../components/ui/card";
-import { Input } from "../../../components/ui/input";
-import { Textarea } from "../../../components/ui/textarea";
 
 const ProjectDetailsPage = () => {
   const { id } = useParams();
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const dispatch = useDispatch();
   const projects = useSelector((state) => state.projects.items);
-  const user = useSelector((state) => state.auth.user);
   const project = useMemo(
     () => projects.find((item) => item.id === id),
     [id, projects],
   );
-  const [isEditing, setIsEditing] = useState(searchParams.get("edit") === "1");
-  const { register, handleSubmit, reset } = useForm();
-
-  useEffect(() => {
-    if (project) {
-      reset({
-        title: project.title,
-        description: project.description,
-        techStack: project.techStack.join(", "),
-        features: project.features?.join(", "),
-        tags: project.tags?.join(", "),
-        github: project.github,
-        live: project.live,
-      });
-    }
-  }, [project, reset]);
 
   if (!project) {
     return (
@@ -63,35 +24,6 @@ const ProjectDetailsPage = () => {
       </Card>
     );
   }
-
-  const canManage =
-    user?.username && project.author?.username === user.username;
-  const projectBasePath = location.pathname.startsWith("/dashboard")
-    ? "/dashboard/projects"
-    : "/projects";
-
-  const onUpdate = async (values) => {
-    const payload = new FormData();
-    payload.append("title", values.title);
-    payload.append("description", values.description);
-    payload.append("techStack", values.techStack || "");
-    payload.append("features", values.features || "");
-    payload.append("tags", values.tags || "");
-    payload.append("githubUrl", values.github || "");
-    payload.append("liveUrl", values.live || "");
-    if (values.image?.[0]) {
-      payload.append("thumbnail", values.image[0]);
-    }
-
-    await dispatch(updateProject({ id: project.databaseId, payload })).unwrap();
-
-    setIsEditing(false);
-  };
-
-  const handleDelete = () => {
-    dispatch(deleteProject(project.databaseId));
-    navigate(projectBasePath);
-  };
 
   return (
     <div className="space-y-10">
@@ -115,46 +47,6 @@ const ProjectDetailsPage = () => {
               {project.description}
             </p>
           </div>
-
-          {canManage && (
-            <div className="flex gap-3">
-              <Button
-                variant="secondary"
-                onClick={() => setIsEditing((value) => !value)}
-              >
-                <Pencil className="h-4 w-4" />
-                {isEditing ? "Cancel edit" : "Edit project"}
-              </Button>
-              <Button variant="ghost" onClick={handleDelete}>
-                <Trash2 className="h-4 w-4" />
-                Delete
-              </Button>
-            </div>
-          )}
-
-          {canManage && isEditing ? (
-            <Card className="">
-              <form onSubmit={handleSubmit(onUpdate)} className="grid gap-4">
-                <Input placeholder="Title" {...register("title")} />
-                <Textarea
-                  placeholder="Description"
-                  {...register("description")}
-                />
-                <Input placeholder="Tech stack" {...register("techStack")} />
-                <Input placeholder="Features" {...register("features")} />
-                <Input placeholder="Tags" {...register("tags")} />
-                <Input placeholder="GitHub link" {...register("github")} />
-                <Input placeholder="Live link" {...register("live")} />
-                <Input
-                  type="file"
-                  accept="image/*"
-                  {...register("image")}
-                  className="pt-3"
-                />
-                <Button type="submit">Save changes</Button>
-              </form>
-            </Card>
-          ) : null}
 
           <Card className="">
             <h2 className="text-sm uppercase tracking-[0.24em] text-zinc-500 dark:text-white/60">

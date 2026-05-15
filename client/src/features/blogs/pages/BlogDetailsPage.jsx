@@ -1,35 +1,14 @@
-import { useEffect, useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useMemo } from "react";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import MDEditor from "@uiw/react-md-editor";
-import { MessageCircle, Pencil, Trash2 } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { deleteBlog, updateBlog } from "../../../redux/slices/blogsSlice";
+import { MessageCircle } from "lucide-react";
 import { Card } from "../../../components/ui/card";
-import { Button } from "../../../components/ui/button";
-import { Input } from "../../../components/ui/input";
 
 const BlogDetailsPage = () => {
   const { id } = useParams();
-  const location = useLocation();
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const dispatch = useDispatch();
   const blogs = useSelector((state) => state.blogs.items);
-  const user = useSelector((state) => state.auth.user);
   const blog = useMemo(() => blogs.find((item) => item.id === id), [blogs, id]);
-  const [isEditing, setIsEditing] = useState(searchParams.get("edit") === "1");
-  const [content, setContent] = useState("");
-  const { register, handleSubmit, reset } = useForm();
-
-  useEffect(() => {
-    if (blog) {
-      reset({
-        title: blog.title,
-        tags: blog.tags?.join(", "),
-      });
-    }
-  }, [blog, reset]);
 
   if (!blog) {
     return (
@@ -39,26 +18,6 @@ const BlogDetailsPage = () => {
       </Card>
     );
   }
-
-  const canManage = user?.username && blog.author?.username === user.username;
-
-  const onUpdate = async (values) => {
-    const payload = new FormData();
-    payload.append("title", values.title);
-    payload.append("tags", values.tags || "");
-    payload.append("content", content || blog.content);
-    if (values.cover?.[0]) {
-      payload.append("coverImage", values.cover[0]);
-    }
-
-    await dispatch(updateBlog({ id: blog.databaseId, payload })).unwrap();
-    setIsEditing(false);
-  };
-
-  const handleDelete = () => {
-    dispatch(deleteBlog(blog.databaseId));
-    navigate(location.pathname.startsWith("/dashboard") ? "/dashboard/blogs" : "/blogs");
-  };
 
   return (
     <div className="mx-auto max-w-5xl space-y-10">
@@ -73,39 +32,6 @@ const BlogDetailsPage = () => {
           <p className="mt-3 text-lg text-zinc-950 dark:text-zinc-50">{blog.author.name}</p>
         </div>
       </div>
-
-      {canManage && (
-        <div className="flex gap-3">
-          <Button
-            variant="secondary"
-            onClick={() => {
-              setContent(blog.content);
-              setIsEditing((value) => !value);
-            }}
-          >
-            <Pencil className="h-4 w-4" />
-            {isEditing ? "Cancel edit" : "Edit blog"}
-          </Button>
-          <Button variant="ghost" onClick={handleDelete}>
-            <Trash2 className="h-4 w-4" />
-            Delete
-          </Button>
-        </div>
-      )}
-
-      {isEditing ? (
-        <Card className="space-y-4">
-          <form onSubmit={handleSubmit(onUpdate)} className="space-y-4">
-            <Input placeholder="Blog title" {...register("title")} />
-            <Input placeholder="Tags" {...register("tags")} />
-            <Input type="file" accept="image/*" {...register("cover")} className="pt-3" />
-            <div data-color-mode="dark">
-              <MDEditor value={content} onChange={(next) => setContent(next || "")} height={360} />
-            </div>
-            <Button type="submit">Save changes</Button>
-          </form>
-        </Card>
-      ) : null}
 
       <Card className="prose max-w-none px-6 py-8 dark:prose-invert sm:px-10">
         <div>
