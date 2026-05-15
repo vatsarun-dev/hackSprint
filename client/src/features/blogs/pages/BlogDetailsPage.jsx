@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import MDEditor from "@uiw/react-md-editor";
-import { MessageCircle } from "lucide-react";
 import { Card } from "../../../components/ui/card";
 
 const BlogDetailsPage = () => {
