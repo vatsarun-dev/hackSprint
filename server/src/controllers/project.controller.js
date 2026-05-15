@@ -9,17 +9,14 @@ import {
 import { ApiResponse } from "../utils/apiResponse.js";
 
 export const createProject = asyncHandler(async (req, res) => {
-	const newProject = await createProjectService(req.body, req.user.id);
+	const newProject = await createProjectService(
+		req.body,
+		req.user.id,
+		req.file,
+	);
 	res
 		.status(201)
-		.json(
-			new ApiResponse(
-				201,
-				newProject,
-				"Project created successfully",
-				newProject,
-			),
-		);
+		.json(new ApiResponse(201, "Project created successfully", newProject));
 });
 
 export const getAllProjects = asyncHandler(async (req, res) => {
@@ -41,10 +38,11 @@ export const updateProject = asyncHandler(async (req, res) => {
 		req.params.id,
 		req.body,
 		req.user.id,
+		req.file,
 	);
 	res
 		.status(200)
-		.json(new ApiResponse(200, project, "Project updated successfully"));
+		.json(new ApiResponse(200, "Project updated successfully", project));
 });
 
 export const deleteProject = asyncHandler(async (req, res) => {

@@ -5,7 +5,7 @@ const uploadToImagekit = async (file) => {
 	const response = await imagekit.upload({
 		file: fs.readFileSync(file.path),
 		fileName: file.originalname,
-		folder: "/hackathon/Images/user",
+		folder: "/hackathon",
 	});
 
 	fs.unlinkSync(file.path);

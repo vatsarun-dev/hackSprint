@@ -1,11 +1,21 @@
 import Project from "../models/project.model.js";
 import { ApiError } from "../utils/apiError.js";
+import uploadToImagekit from "../utils/uploadToImagekit.js";
 import { createProjectValidator } from "../validators/project.validator.js";
 
-export const createProjectService = async (projectData, userId) => {
+export const createProjectService = async (projectData, userId, file) => {
 	const validatedData = createProjectValidator(projectData);
+	let thumbnailUrl = "";
 
-	const newProject = await Project.create({ ...validatedData, author: userId });
+	if (file) {
+		thumbnailUrl = await uploadToImagekit(file);
+	}
+
+	const newProject = await Project.create({
+		...validatedData,
+		author: userId,
+		thumbnail: thumbnailUrl,
+	});
 	return newProject;
 };
 
@@ -24,7 +34,7 @@ export const getProjectBySlugService = async (slug) => {
 	return project;
 };
 
-export const updateProjectService = async (id, updateData, userId) => {
+export const updateProjectService = async (id, updateData, userId, file) => {
 	const project = await Project.findById(id);
 
 	if (!project) {
@@ -36,6 +46,11 @@ export const updateProjectService = async (id, updateData, userId) => {
 	}
 
 	Object.assign(project, updateData);
+  
+	if (file) {
+		const thumbnailUrl = await uploadToImagekit(file);
+		project.thumbnail = thumbnailUrl;
+	}
 
 	await project.save();
 
