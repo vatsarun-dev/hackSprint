@@ -1,11 +1,13 @@
 import { Router } from "express";
 import {
+	followUser,
 	getMe,
 	getRefreshToken,
 	getUser,
 	loginUser,
 	logoutUser,
 	registerUser,
+	unFollowUser,
 	updateProfile,
 } from "../controllers/user.controller.js";
 import authMiddleware from "../middlewares/auth.middleware.js";
@@ -34,5 +36,8 @@ router.patch(
 	]),
 	updateProfile,
 );
+
+router.post("/:userId/follow", authMiddleware, followUser);
+router.delete("/:userId/unfollow", authMiddleware, unFollowUser);
 
 export default router;

@@ -154,3 +154,53 @@ export const updateProfileService = async (userId, data, files) => {
 	await user.save();
 	return user;
 };
+
+export const followUserService = async (currentUserId, targetUserId) => {
+	if (currentUserId === targetUserId) {
+		throw new ApiError(400, "You cannot follow yourself");
+	}
+	const user = await User.findById(currentUserId);
+	const targetUser = await User.findById(targetUserId);
+
+	if (!user || !targetUser) {
+		throw new ApiError(404, "User not found");
+	}
+
+	// Check if already following
+	if (user.following.some((id) => id.toString() === targetUserId)) {
+		throw new ApiError(400, "Already following this user");
+	}
+
+	user.following.push(targetUser._id);
+	targetUser.followers.push(user._id);
+
+	await user.save();
+	await targetUser.save();
+
+	return user;
+};
+
+export const unFollowUserService = async (currentUserId, targetUserId) => {
+	if (currentUserId === targetUserId) {
+		throw new ApiError(400, "You cannot unfollow yourself");
+	}
+	const user = await User.findById(currentUserId);
+	const targetUser = await User.findById(targetUserId);
+
+	if (!user || !targetUser) {
+		throw new ApiError(404, "User not found");
+	}
+
+	// Check if following
+	if (!user.following.some((id) => id.toString() === targetUserId)) {
+		throw new ApiError(400, "Not following this user");
+	}
+
+	user.following.pull(targetUser._id);
+	targetUser.followers.pull(user._id);
+
+	await user.save();
+	await targetUser.save();
+
+	return user;
+};

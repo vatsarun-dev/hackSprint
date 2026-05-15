@@ -1,11 +1,13 @@
 import asyncHandler from "../middlewares/async.handler.js";
 import {
+  followUserService,
 	getMeService,
 	getUserService,
 	loginUserService,
 	logoutUserService,
 	refreshTokenService,
 	registerUserService,
+	unFollowUserService,
 	updateProfileService,
 } from "../services/user.service.js";
 import { ApiResponse } from "../utils/apiResponse.js";
@@ -72,4 +74,14 @@ export const updateProfile = asyncHandler(async (req, res) => {
 	return res
 		.status(200)
 		.json(new ApiResponse(200, "User profile updated", user));
+});
+
+export const followUser = asyncHandler(async (req, res) => {
+	const user = await followUserService(req.user?.id, req.params.userId);
+	return res.status(200).json(new ApiResponse(200, "User followed", user));
+});
+
+export const unFollowUser = asyncHandler(async (req, res) => {
+	const user = await unFollowUserService(req.user?.id, req.params.userId);
+	return res.status(200).json(new ApiResponse(200, "User unfollowed", user));
 });
