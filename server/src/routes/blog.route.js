@@ -15,6 +15,8 @@ router.get("/health", (_req, res) => {
 	res.send("blog route is running");
 });
 
+//change getsingle blog to get blog by slug
+
 router.post("/", authMiddleware, createBlog);
 router.get("/", getAllBlogs);
 router.get("/:id", getSingleBlog);
