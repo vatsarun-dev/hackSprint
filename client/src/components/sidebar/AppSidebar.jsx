@@ -1,4 +1,4 @@
-import { BarChart3, BookOpen, FolderKanban, LayoutDashboard, LogOut, Menu, UserRound } from "lucide-react";
+import { BarChart3, BookOpen, FolderKanban, Home, LayoutDashboard, LogOut, Menu, UserRound } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleSidebar } from "../../redux/slices/uiSlice";
@@ -7,6 +7,7 @@ import { cn } from "../../lib/utils";
 import { Button } from "../ui/button";
 
 const items = [
+  { icon: Home, label: "Home", to: "/dashboard/home" },
   { icon: LayoutDashboard, label: "Dashboard", to: "/dashboard" },
   { icon: UserRound, label: "My Profile", to: "/profile/edit" },
   { icon: FolderKanban, label: "Projects", to: "/dashboard/projects" },

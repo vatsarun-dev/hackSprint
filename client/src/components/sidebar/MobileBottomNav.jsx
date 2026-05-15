@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import { cn } from "../../lib/utils";
 
 const items = [
-  { to: "/dashboard", icon: Home, label: "Home" },
+  { to: "/dashboard/home", icon: Home, label: "Home" },
   { to: "/dashboard/community", icon: Search, label: "Community" },
   { to: "/dashboard/projects", icon: FolderKanban, label: "Projects" },
   { to: "/blogs/write", icon: BookOpen, label: "Write" },

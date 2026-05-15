@@ -58,6 +58,7 @@ export const router = createBrowserRouter([
       {
         element: <DashboardLayout />,
         children: [
+          { path: "/dashboard/home", element: withSuspense(HomePage) },
           { path: "/dashboard", element: withSuspense(DashboardHomePage) },
           { path: "/profile/edit", element: withSuspense(EditProfilePage) },
           { path: "/dashboard/projects", element: withSuspense(ProjectsPage) },
