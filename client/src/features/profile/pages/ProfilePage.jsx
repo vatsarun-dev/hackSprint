@@ -1,8 +1,9 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Code2, Download, Link2, MapPin, Share2 } from "lucide-react";
 import { developers, profileSections } from "../../../lib/mock-data";
+import { userService } from "../../../services/userService";
 import { Avatar, AvatarFallback, AvatarImage } from "../../../components/ui/avatar";
 import { Badge } from "../../../components/ui/badge";
 import { Button } from "../../../components/ui/button";
@@ -15,28 +16,86 @@ const ProfilePage = () => {
   const user = useSelector((state) => state.auth.user);
   const projects = useSelector((state) => state.projects.items);
   const blogs = useSelector((state) => state.blogs.items);
+  const [remoteProfile, setRemoteProfile] = useState({
+    username: "",
+    user: null,
+    error: "",
+  });
+  const isOwnProfile = user?.username === username;
+
+  useEffect(() => {
+    let active = true;
+
+    if (isOwnProfile) {
+      return () => {
+        active = false;
+      };
+    }
+
+    userService
+      .getProfile(username)
+      .then((developer) => {
+        if (active) {
+          setRemoteProfile({ username, user: developer, error: "" });
+        }
+      })
+      .catch((error) => {
+        if (active) {
+          setRemoteProfile({
+            username,
+            user: null,
+            error: error.response?.data?.message || "Profile not found",
+          });
+        }
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [isOwnProfile, username]);
+
+  const profileUser = isOwnProfile ? user : remoteProfile.username === username ? remoteProfile.user : null;
+  const loadingProfile = !isOwnProfile && remoteProfile.username !== username;
+  const profileError = remoteProfile.username === username ? remoteProfile.error : "";
 
   const developer = useMemo(
     () => {
-      if (user?.username === username) {
-        return {
-          ...developers[0],
-          ...user,
-          title: user.title || "Developer",
-          location: user.location || "India",
-          bio: user.bio || "Building useful projects and learning in public.",
-          skills: user.skills?.length ? user.skills : profileSections.skills,
-          cover: user.cover || developers[0].cover,
-        };
-      }
+      if (!profileUser) return null;
 
-      return developers.find((item) => item.username === username) || developers[0];
+      return {
+        ...developers[0],
+        ...profileUser,
+        title: profileUser.title || "Developer",
+        location: profileUser.location || "India",
+        bio: profileUser.bio || "Building useful projects and learning in public.",
+        skills: profileUser.skills?.length ? profileUser.skills : profileSections.skills,
+        avatar: profileUser.avatar || developers[0].avatar,
+        cover: profileUser.cover || developers[0].cover,
+      };
     },
-    [user, username],
+    [profileUser],
   );
 
+  if (loadingProfile) {
+    return (
+      <Card>
+        <p className="text-lg font-semibold">Loading profile</p>
+        <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">Fetching developer information from the database.</p>
+      </Card>
+    );
+  }
+
+  if (!developer) {
+    return (
+      <Card>
+        <p className="text-lg font-semibold">{profileError || "Profile not found"}</p>
+        <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">This developer profile does not exist yet.</p>
+      </Card>
+    );
+  }
+
   const developerProjects = projects.filter((project) => project.author?.username === developer.username);
-  const visibleProjects = developerProjects.length ? developerProjects : projects.slice(0, 2);
+  const developerBlogs = blogs.filter((blog) => blog.author?.username === developer.username);
 
   return (
     <div className="space-y-10">
@@ -47,7 +106,7 @@ const ProfilePage = () => {
             <div className="flex items-end gap-5">
               <Avatar className="h-32 w-32 rounded-[2rem] border-4 border-zinc-900 sm:h-40 sm:w-40">
                 <AvatarImage src={developer.avatar} alt={developer.name} />
-                <AvatarFallback>{developer.name.slice(0, 2)}</AvatarFallback>
+                <AvatarFallback>{developer.name?.slice(0, 2) || "DC"}</AvatarFallback>
               </Avatar>
               <div className="pb-2">
                 <p className="text-sm uppercase tracking-[0.26em] text-zinc-500 dark:text-white/60">Developer identity</p>
@@ -119,17 +178,27 @@ const ProfilePage = () => {
           <div>
             <h2 className="mb-4 text-3xl font-semibold tracking-[-0.03em]">Featured projects</h2>
             <div className="grid gap-5">
-              {visibleProjects.map((project) => (
+              {developerProjects.map((project) => (
                 <ProjectCard key={project.id} project={project} />
               ))}
+              {!developerProjects.length ? (
+                <Card>
+                  <p className="text-sm text-zinc-600 dark:text-zinc-400">No projects published by this developer yet.</p>
+                </Card>
+              ) : null}
             </div>
           </div>
           <div>
             <h2 className="mb-4 text-3xl font-semibold tracking-[-0.03em]">Latest blogs</h2>
             <div className="grid gap-5">
-              {blogs.map((blog) => (
+              {developerBlogs.map((blog) => (
                 <BlogCard key={blog.id} blog={blog} />
               ))}
+              {!developerBlogs.length ? (
+                <Card>
+                  <p className="text-sm text-zinc-600 dark:text-zinc-400">No blogs published by this developer yet.</p>
+                </Card>
+              ) : null}
             </div>
           </div>
         </div>

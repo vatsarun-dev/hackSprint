@@ -12,12 +12,16 @@ const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const { loading } = useSelector((state) => state.auth);
+  const { loading, error } = useSelector((state) => state.auth);
 
   const onSubmit = async (values) => {
-    await dispatch(loginUser(values));
-    reset();
-    navigate(location.state?.from || "/dashboard");
+    try {
+      await dispatch(loginUser(values)).unwrap();
+      reset();
+      navigate(location.state?.from || "/dashboard");
+    } catch {
+      // Error is rendered from Redux state.
+    }
   };
 
   return (
@@ -33,21 +37,36 @@ const LoginPage = () => {
           <LogIn className="h-4 w-4" />
           Welcome back
         </span>
-        <h2 className="mt-6 text-3xl font-semibold">Log in to your developer workspace</h2>
+        <h2 className="mt-6 text-3xl font-semibold">
+          Log in to your developer workspace
+        </h2>
         <p className="mt-3 text-sm text-zinc-600 dark:text-zinc-400">
-          Continue building your profile, publishing ideas, and growing your network.
+          Continue building your profile, publishing ideas, and growing your
+          network.
         </p>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <Input placeholder="Email address" type="email" {...register("email")} />
-        <Input placeholder="Password" type="password" {...register("password")} />
+        <Input
+          placeholder="Email address"
+          type="email"
+          {...register("email")}
+        />
+        <Input
+          placeholder="Password"
+          type="password"
+          {...register("password")}
+        />
+        {error ? <p className="text-sm text-red-500">{error}</p> : null}
         <Button className="w-full" type="submit" disabled={loading}>
           {loading ? "Signing in..." : "Login"}
         </Button>
       </form>
       <p className="mt-6 text-center text-sm text-zinc-600 dark:text-zinc-400">
         New here?{" "}
-        <Link to="/signup" className="font-medium text-zinc-800 dark:text-white/80">
+        <Link
+          to="/signup"
+          className="font-medium text-zinc-800 dark:text-white/80"
+        >
           Create an account
         </Link>
       </p>
@@ -56,6 +75,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-
-
-

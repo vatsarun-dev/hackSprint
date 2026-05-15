@@ -27,7 +27,7 @@ const ProjectsPage = () => {
       const matchesQuery =
         project.title.toLowerCase().includes(debouncedQuery.toLowerCase()) ||
         project.description.toLowerCase().includes(debouncedQuery.toLowerCase());
-      const matchesTag = activeTag === "All" || project.tags.includes(activeTag);
+      const matchesTag = activeTag === "All" || project.tags?.includes(activeTag);
       return matchesQuery && matchesTag;
     });
   }, [activeTag, debouncedQuery, projects]);
@@ -88,7 +88,7 @@ const ProjectsPage = () => {
                     <Pencil className="h-4 w-4" />
                     Edit
                   </Button>
-                  <Button variant="danger" size="sm" onClick={() => handleDelete(project.id)}>
+                  <Button variant="danger" size="sm" onClick={() => handleDelete(project.databaseId)}>
                     <Trash2 className="h-4 w-4" />
                     Delete
                   </Button>

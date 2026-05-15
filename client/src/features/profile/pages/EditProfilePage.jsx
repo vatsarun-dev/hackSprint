@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Save } from "lucide-react";
 import { updateProfile } from "../../../redux/slices/authSlice";
-import { fileToDataUrl, splitCommaValues } from "../../../lib/content";
 import { Badge } from "../../../components/ui/badge";
 import { Button } from "../../../components/ui/button";
 import { Card } from "../../../components/ui/card";
@@ -27,21 +26,20 @@ const EditProfilePage = () => {
   const currentSkills = user?.skills?.length ? user.skills : ["React", "Tailwind CSS", "Redux Toolkit"];
 
   const onSubmit = async (values) => {
-    const avatar = (await fileToDataUrl(values.avatar?.[0])) || user?.avatar;
+    const payload = new FormData();
+    payload.append("name", values.name);
+    payload.append("username", values.username);
+    payload.append("title", values.title || "");
+    payload.append("location", values.location || "");
+    payload.append("bio", values.bio || "");
+    payload.append("summary", values.bio || "");
+    payload.append("skills", values.skills || "");
+    if (values.avatar?.[0]) {
+      payload.append("profilePicture", values.avatar[0]);
+    }
 
-    dispatch(
-      updateProfile({
-        name: values.name,
-        username: values.username,
-        title: values.title,
-        location: values.location,
-        bio: values.bio,
-        skills: splitCommaValues(values.skills),
-        avatar,
-      }),
-    );
-
-    navigate(`/profile/${values.username || user?.username}`);
+    const updatedUser = await dispatch(updateProfile(payload)).unwrap();
+    navigate(`/profile/${updatedUser.username || values.username || user?.username}`);
   };
 
   return (

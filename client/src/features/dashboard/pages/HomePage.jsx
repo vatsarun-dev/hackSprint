@@ -2,7 +2,7 @@ import { useMemo, useRef } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { ArrowRight, BookOpen, FolderKanban, Network, Sparkles, Star, UserCircle2 } from "lucide-react";
-import { developers } from "../../../lib/mock-data";
+import { blogs as seedBlogs, developers, projects as seedProjects } from "../../../lib/mock-data";
 import { Button } from "../../../components/ui/button";
 import { Card } from "../../../components/ui/card";
 import { useHeroAnimation } from "../../../components/animations/heroAnimation";
@@ -37,6 +37,8 @@ const HomePage = () => {
   const storyRef = useRef(null);
   const projects = useSelector((state) => state.projects.items);
   const blogs = useSelector((state) => state.blogs.items);
+  const previewProjects = projects.length >= 2 ? projects : [...projects, ...seedProjects].slice(0, 2);
+  const previewBlogs = blogs.length >= 2 ? blogs : [...blogs, ...seedBlogs].slice(0, 2);
   useHeroAnimation(heroRef);
   useRevealAnimation(featuresRef);
   useRevealAnimation(storyRef);
@@ -160,16 +162,16 @@ const HomePage = () => {
 
             <div className="absolute bottom-[14%] left-[16%] w-[48%] rounded-[2.2rem] p-[1px]">
               <Card data-hero-card className="rounded-[2.2rem] p-0">
-                <img src={projects[1].image} alt={projects[1].title} className="h-52 w-full object-cover" />
+                <img src={previewProjects[1].image} alt={previewProjects[1].title} className="h-52 w-full object-cover" />
                 <div className="p-5">
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <p className="text-xs uppercase tracking-[0.24em] text-zinc-500 dark:text-white/60">Project showcase</p>
-                      <p className="mt-2 text-xl font-semibold">{projects[1].title}</p>
+                      <p className="mt-2 text-xl font-semibold">{previewProjects[1].title}</p>
                     </div>
                     <div className="rounded-full bg-white/8 px-3 py-1 text-xs text-zinc-600 dark:text-zinc-400">Featured</div>
                   </div>
-                  <p className="mt-3 text-sm leading-6 text-zinc-600 dark:text-zinc-400">{projects[1].description}</p>
+                  <p className="mt-3 text-sm leading-6 text-zinc-600 dark:text-zinc-400">{previewProjects[1].description}</p>
                 </div>
               </Card>
             </div>
@@ -177,10 +179,10 @@ const HomePage = () => {
             <div className="absolute bottom-[2%] right-[8%] w-[40%] rounded-[1.8rem] p-[1px]">
               <Card data-hero-card className="rounded-[1.8rem] p-5">
                 <p className="text-xs uppercase tracking-[0.24em] text-zinc-500 dark:text-white/60">Technical writing</p>
-                <p className="mt-3 text-lg font-semibold leading-snug">{blogs[0].title}</p>
-                <p className="mt-3 text-sm text-zinc-600 dark:text-zinc-400">{blogs[0].excerpt}</p>
+                <p className="mt-3 text-lg font-semibold leading-snug">{previewBlogs[0].title}</p>
+                <p className="mt-3 text-sm text-zinc-600 dark:text-zinc-400">{previewBlogs[0].excerpt}</p>
                 <div className="mt-5 flex items-center justify-between text-sm">
-                  <span className="text-zinc-600 dark:text-zinc-400">{blogs[0].readTime}</span>
+                  <span className="text-zinc-600 dark:text-zinc-400">{previewBlogs[0].readTime}</span>
                   <ArrowRight className="h-4 w-4 text-zinc-600 dark:text-zinc-400" />
                 </div>
               </Card>
@@ -313,10 +315,10 @@ const HomePage = () => {
                 </Link>
               </div>
               <div className="relative min-h-72 overflow-hidden border-l border-white/8">
-                <img src={projects[0].image} alt={projects[0].title} className="h-full w-full object-cover" />
+                <img src={previewProjects[0].image} alt={previewProjects[0].title} className="h-full w-full object-cover" />
                 <div className="absolute inset-x-0 bottom-0 bg-[linear-gradient(180deg,transparent,rgba(7,11,20,0.92))] p-6">
-                  <p className="text-2xl font-semibold">{projects[0].title}</p>
-                  <p className="mt-2 text-sm text-slate-300">{projects[0].tags.join(" / ")}</p>
+                  <p className="text-2xl font-semibold">{previewProjects[0].title}</p>
+                  <p className="mt-2 text-sm text-slate-300">{previewProjects[0].tags.join(" / ")}</p>
                 </div>
               </div>
             </div>
@@ -329,13 +331,13 @@ const HomePage = () => {
                 <h3 className="mt-4 text-3xl font-semibold leading-tight">Reading experiences shaped like modern magazines.</h3>
               </div>
               <div className="rounded-full border border-white/10 bg-white/6 px-3 py-1 text-xs text-zinc-600 dark:text-zinc-400">
-                {blogs[1].readTime}
+                {previewBlogs[1].readTime}
               </div>
             </div>
             <div className="grid gap-5 md:grid-cols-[1.1fr_0.9fr]">
               <div>
-                <p className="text-xl font-medium leading-snug">{blogs[1].title}</p>
-                <p className="mt-4 text-sm leading-7 text-zinc-600 dark:text-zinc-400">{blogs[1].excerpt}</p>
+                <p className="text-xl font-medium leading-snug">{previewBlogs[1].title}</p>
+                <p className="mt-4 text-sm leading-7 text-zinc-600 dark:text-zinc-400">{previewBlogs[1].excerpt}</p>
               </div>
               <div className="rounded-[1.8rem] border border-white/8 bg-white/5 p-5">
                 <div className="space-y-3 font-mono text-xs text-zinc-600 dark:text-zinc-400">

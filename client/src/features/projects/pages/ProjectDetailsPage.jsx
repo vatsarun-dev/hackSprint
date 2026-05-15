@@ -4,7 +4,6 @@ import { useLocation, useNavigate, useParams, useSearchParams } from "react-rout
 import { Code2, ExternalLink, MessageSquare, Pencil, Trash2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { deleteProject, updateProject } from "../../../redux/slices/projectsSlice";
-import { fileToDataUrl, splitCommaValues } from "../../../lib/content";
 import { Badge } from "../../../components/ui/badge";
 import { Button } from "../../../components/ui/button";
 import { Card } from "../../../components/ui/card";
@@ -29,8 +28,8 @@ const ProjectDetailsPage = () => {
         title: project.title,
         description: project.description,
         techStack: project.techStack.join(", "),
-        features: project.features.join(", "),
-        tags: project.tags.join(", "),
+        features: project.features?.join(", "),
+        tags: project.tags?.join(", "),
         github: project.github,
         live: project.live,
       });
@@ -50,27 +49,25 @@ const ProjectDetailsPage = () => {
   const projectBasePath = location.pathname.startsWith("/dashboard") ? "/dashboard/projects" : "/projects";
 
   const onUpdate = async (values) => {
-    const nextImage = (await fileToDataUrl(values.image?.[0])) || project.image;
+    const payload = new FormData();
+    payload.append("title", values.title);
+    payload.append("description", values.description);
+    payload.append("techStack", values.techStack || "");
+    payload.append("features", values.features || "");
+    payload.append("tags", values.tags || "");
+    payload.append("githubUrl", values.github || "");
+    payload.append("liveUrl", values.live || "");
+    if (values.image?.[0]) {
+      payload.append("thumbnail", values.image[0]);
+    }
 
-    dispatch(
-      updateProject({
-        ...project,
-        title: values.title,
-        description: values.description,
-        techStack: splitCommaValues(values.techStack),
-        features: splitCommaValues(values.features),
-        tags: splitCommaValues(values.tags),
-        github: values.github,
-        live: values.live,
-        image: nextImage,
-      }),
-    );
+    await dispatch(updateProject({ id: project.databaseId, payload })).unwrap();
 
     setIsEditing(false);
   };
 
   const handleDelete = () => {
-    dispatch(deleteProject(project.id));
+    dispatch(deleteProject(project.databaseId));
     navigate(projectBasePath);
   };
 
@@ -81,7 +78,7 @@ const ProjectDetailsPage = () => {
         <div className="space-y-6">
           <div>
             <div className="flex flex-wrap gap-2">
-              {project.tags.map((tag) => (
+              {(project.tags || []).map((tag) => (
                 <Badge key={tag}>{tag}</Badge>
               ))}
             </div>
@@ -128,7 +125,7 @@ const ProjectDetailsPage = () => {
           <Card className="">
             <h2 className="text-sm uppercase tracking-[0.24em] text-zinc-500 dark:text-white/60">Key features</h2>
             <div className="mt-4 grid gap-3">
-              {project.features.map((feature) => (
+              {(project.features || []).map((feature) => (
                 <div key={feature} className="rounded-[1.5rem] border border-zinc-300 bg-zinc-50 px-4 py-4 text-sm text-zinc-800 dark:border-white/8 dark:bg-white/5 dark:text-zinc-100">
                   {feature}
                 </div>

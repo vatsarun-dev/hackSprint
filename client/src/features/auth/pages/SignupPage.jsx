@@ -11,12 +11,16 @@ const SignupPage = () => {
   const { register, handleSubmit, reset } = useForm();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading } = useSelector((state) => state.auth);
+  const { loading, error } = useSelector((state) => state.auth);
 
   const onSubmit = async (values) => {
-    await dispatch(signupUser(values));
-    reset();
-    navigate("/dashboard");
+    try {
+      await dispatch(signupUser(values)).unwrap();
+      reset();
+      navigate("/dashboard");
+    } catch {
+      // Error is rendered from Redux state.
+    }
   };
 
   return (
@@ -41,6 +45,7 @@ const SignupPage = () => {
         <Input placeholder="Name" {...register("name")} />
         <Input placeholder="Email address" type="email" {...register("email")} />
         <Input placeholder="Password" type="password" {...register("password")} />
+        {error ? <p className="text-sm text-red-500">{error}</p> : null}
         <Button className="w-full" type="submit" disabled={loading}>
           {loading ? "Creating account..." : "Sign Up"}
         </Button>

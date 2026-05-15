@@ -5,7 +5,6 @@ import MDEditor from "@uiw/react-md-editor";
 import { MessageCircle, Pencil, Trash2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { deleteBlog, updateBlog } from "../../../redux/slices/blogsSlice";
-import { estimateReadTime, fileToDataUrl, getExcerpt, splitCommaValues } from "../../../lib/content";
 import { Card } from "../../../components/ui/card";
 import { Button } from "../../../components/ui/button";
 import { Input } from "../../../components/ui/input";
@@ -27,7 +26,7 @@ const BlogDetailsPage = () => {
     if (blog) {
       reset({
         title: blog.title,
-        tags: blog.tags.join(", "),
+        tags: blog.tags?.join(", "),
       });
     }
   }, [blog, reset]);
@@ -44,23 +43,20 @@ const BlogDetailsPage = () => {
   const canManage = user?.username && blog.author?.username === user.username;
 
   const onUpdate = async (values) => {
-    const nextCover = (await fileToDataUrl(values.cover?.[0])) || blog.cover;
-    dispatch(
-      updateBlog({
-        ...blog,
-        title: values.title,
-        tags: splitCommaValues(values.tags),
-        content: content || blog.content,
-        cover: nextCover,
-        excerpt: getExcerpt(content || blog.content, values.title),
-        readTime: estimateReadTime(content || blog.content),
-      }),
-    );
+    const payload = new FormData();
+    payload.append("title", values.title);
+    payload.append("tags", values.tags || "");
+    payload.append("content", content || blog.content);
+    if (values.cover?.[0]) {
+      payload.append("coverImage", values.cover[0]);
+    }
+
+    await dispatch(updateBlog({ id: blog.databaseId, payload })).unwrap();
     setIsEditing(false);
   };
 
   const handleDelete = () => {
-    dispatch(deleteBlog(blog.id));
+    dispatch(deleteBlog(blog.databaseId));
     navigate(location.pathname.startsWith("/dashboard") ? "/dashboard/blogs" : "/blogs");
   };
 

@@ -1,18 +1,15 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Eye } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { createProject } from "../../../redux/slices/projectsSlice";
-import { createId, fileToDataUrl, splitCommaValues } from "../../../lib/content";
+import { splitCommaValues } from "../../../lib/content";
 import { Button } from "../../../components/ui/button";
 import { Card } from "../../../components/ui/card";
 import { Input } from "../../../components/ui/input";
 import { Textarea } from "../../../components/ui/textarea";
 import { Badge } from "../../../components/ui/badge";
-
-const fallbackImage =
-  "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80";
 
 const CreateProjectPage = () => {
   const { register, handleSubmit, reset } = useForm();
@@ -21,7 +18,6 @@ const CreateProjectPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const user = useSelector((state) => state.auth.user);
 
   const previewRegister = (name, options = {}) =>
     register(name, {
@@ -31,34 +27,26 @@ const CreateProjectPage = () => {
 
   const onSubmit = async (formValues) => {
     setSubmitting(true);
-    const imageFile = formValues.image?.[0];
-    const image = (await fileToDataUrl(imageFile)) || fallbackImage;
+    try {
+      const payload = new FormData();
+      payload.append("title", formValues.title);
+      payload.append("description", formValues.description);
+      payload.append("techStack", formValues.techStack || "");
+      payload.append("features", formValues.features || "");
+      payload.append("tags", formValues.tags || "");
+      payload.append("githubUrl", formValues.github || "");
+      payload.append("liveUrl", formValues.live || "");
+      if (formValues.image?.[0]) {
+        payload.append("thumbnail", formValues.image[0]);
+      }
 
-    const project = {
-      id: createId("proj"),
-      title: formValues.title,
-      description: formValues.description,
-      techStack: splitCommaValues(formValues.techStack),
-      likes: 0,
-      author: {
-        id: user?.id || "current-user",
-        username: user?.username || "you",
-        name: user?.name || user?.username || "You",
-        title: user?.title || "Developer",
-        avatar: user?.avatar || fallbackImage,
-      },
-      image,
-      features: splitCommaValues(formValues.features),
-      tags: splitCommaValues(formValues.tags),
-      github: formValues.github,
-      live: formValues.live,
-    };
-
-    dispatch(createProject(project));
-    reset();
-    setSubmitting(false);
-    const projectBasePath = location.pathname.startsWith("/dashboard") ? "/dashboard/projects" : "/projects";
-    navigate(`${projectBasePath}/${project.id}`);
+      const project = await dispatch(createProject(payload)).unwrap();
+      reset();
+      const projectBasePath = location.pathname.startsWith("/dashboard") ? "/dashboard/projects" : "/projects";
+      navigate(`${projectBasePath}/${project.id}`);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (

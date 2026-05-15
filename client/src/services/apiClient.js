@@ -1,9 +1,34 @@
 import axios from "axios";
 
 export const apiClient = axios.create({
-  baseURL: "https://api.devconnect.local",
-  timeout: 5000,
+  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:4000/api",
+  timeout: 10000,
+  withCredentials: true,
 });
 
+apiClient.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (
+      error.response?.status === 401 &&
+      originalRequest &&
+      !originalRequest._retry &&
+      !originalRequest.skipAuthRefresh
+    ) {
+      originalRequest._retry = true;
+
+      try {
+        await apiClient.get("/user/refresh");
+        return apiClient(originalRequest);
+      } catch {
+        return Promise.reject(error);
+      }
+    }
+
+    return Promise.reject(error);
+  },
+);
 
 

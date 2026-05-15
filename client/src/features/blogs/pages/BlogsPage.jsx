@@ -12,11 +12,7 @@ import { Card } from "../../../components/ui/card";
 import { Input } from "../../../components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui/tabs";
 import { useDebounce } from "../../../hooks/useDebounce";
-import { createId, estimateReadTime, fileToDataUrl, getExcerpt, splitCommaValues } from "../../../lib/content";
 import { createBlog, deleteBlog } from "../../../redux/slices/blogsSlice";
-
-const fallbackCover =
-  "https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&w=1200&q=80";
 
 const BlogsPage = () => {
   const dispatch = useDispatch();
@@ -58,31 +54,23 @@ const BlogsPage = () => {
 
   const handleCreateBlog = async (formValues) => {
     setSubmitting(true);
-    const cover = (await fileToDataUrl(formValues.cover?.[0])) || fallbackCover;
+    try {
+      const payload = new FormData();
+      payload.append("title", formValues.title);
+      payload.append("tags", formValues.tags || "");
+      payload.append("content", content);
+      if (formValues.cover?.[0]) {
+        payload.append("coverImage", formValues.cover[0]);
+      }
 
-    const blog = {
-      id: createId("blog"),
-      title: formValues.title,
-      excerpt: getExcerpt(content, formValues.title),
-      readTime: estimateReadTime(content),
-      author: {
-        id: user?.id || "current-user",
-        username: user?.username || "you",
-        name: user?.name || user?.username || "You",
-        title: user?.title || "Developer",
-        avatar: user?.avatar || fallbackCover,
-      },
-      tags: splitCommaValues(formValues.tags),
-      cover,
-      content,
-    };
-
-    dispatch(createBlog(blog));
-    reset();
-    setContent("");
-    setSubmitting(false);
-    setShowComposer(false);
-    navigate(`${blogBasePath}/${blog.id}`);
+      const blog = await dispatch(createBlog(payload)).unwrap();
+      reset();
+      setContent("");
+      setShowComposer(false);
+      navigate(`${blogBasePath}/${blog.id}`);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleCancelComposer = () => {
@@ -139,7 +127,7 @@ const BlogsPage = () => {
                     <Edit3 className="h-4 w-4" />
                     Edit
                   </Button>
-                  <Button variant="danger" size="sm" onClick={() => handleDelete(blog.id)}>
+                  <Button variant="danger" size="sm" onClick={() => handleDelete(blog.databaseId)}>
                     <Trash2 className="h-4 w-4" />
                     Delete
                   </Button>

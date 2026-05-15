@@ -1,7 +1,7 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
-import { developers } from "../../../lib/mock-data";
 import { useDebounce } from "../../../hooks/useDebounce";
+import { userService } from "../../../services/userService";
 import { Card } from "../../../components/ui/card";
 import { Input } from "../../../components/ui/input";
 import { Badge } from "../../../components/ui/badge";
@@ -13,17 +13,37 @@ const skillFilters = ["All", "React", "GSAP", "Node.js", "Open Source", "DX"];
 const CommunityPage = () => {
   const [query, setQuery] = useState("");
   const [skill, setSkill] = useState("All");
+  const [developers, setDevelopers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const debouncedQuery = useDebounce(query, 250);
+
+  useEffect(() => {
+    let active = true;
+
+    userService
+      .search(debouncedQuery)
+      .then((users) => {
+        if (active) {
+          setDevelopers(users);
+        }
+      })
+      .finally(() => {
+        if (active) {
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [debouncedQuery]);
 
   const filteredDevelopers = useMemo(() => {
     return developers.filter((developer) => {
-      const matchesQuery =
-        developer.name.toLowerCase().includes(debouncedQuery.toLowerCase()) ||
-        developer.skills.some((item) => item.toLowerCase().includes(debouncedQuery.toLowerCase()));
-      const matchesSkill = skill === "All" || developer.skills.includes(skill);
-      return matchesQuery && matchesSkill;
+      const matchesSkill = skill === "All" || developer.skills?.includes(skill);
+      return matchesSkill;
     });
-  }, [debouncedQuery, skill]);
+  }, [developers, skill]);
 
   return (
     <div className="space-y-10">
@@ -53,7 +73,9 @@ const CommunityPage = () => {
           ))}
         </div>
       </Card>
-      {filteredDevelopers.length ? (
+      {loading ? (
+        <EmptyState title="Loading developers" description="Fetching the latest community profiles." />
+      ) : filteredDevelopers.length ? (
         <div className="grid gap-5 lg:grid-cols-3">
           {filteredDevelopers.map((developer, index) => (
             <div key={developer.id} className={index % 2 === 0 ? "lg:translate-y-8" : ""}>

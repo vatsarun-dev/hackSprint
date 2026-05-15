@@ -1,41 +1,27 @@
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+import { apiClient } from "./apiClient";
+import { mapUser, unwrapApiData } from "./mappers";
 
 export const authService = {
   async login(payload) {
-    await delay(900);
-    return {
-      id: "user-1",
-      username: payload.email?.split("@")[0] || "devbuilder",
-      email: payload.email,
-      name: "Aria Lennox",
-      title: "Senior Frontend Engineer",
-      location: "Bengaluru, India",
-      bio: "I build focused React products with clean interfaces and practical frontend systems.",
-      skills: ["React", "Tailwind CSS", "Redux Toolkit"],
-      avatar:
-        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=240&q=80",
-      cover:
-        "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80",
-    };
+    const response = await apiClient.post("/user/login", payload);
+    return mapUser(unwrapApiData(response));
   },
   async signup(payload) {
-    await delay(1100);
-    const fallbackName = payload.email?.split("@")[0] || "devbuilder";
-    const displayName = payload.name || fallbackName;
-    return {
-      id: "user-2",
-      username: displayName.toLowerCase().trim().replace(/\s+/g, "-"),
-      email: payload.email,
-      name: displayName,
-      title: "Product-minded Developer",
-      location: "India",
-      bio: "I am shaping my developer profile and collecting my best projects in one place.",
-      skills: ["React", "JavaScript", "Tailwind CSS"],
-      avatar:
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=240&q=80",
-      cover:
-        "https://images.unsplash.com/photo-1498050108023-c524f4df085?auto=format&fit=crop&w=1200&q=80",
-    };
+    const response = await apiClient.post("/user/register", payload);
+    return mapUser(unwrapApiData(response));
+  },
+  async me() {
+    const response = await apiClient.get("/user/me", { skipAuthRefresh: true });
+    return mapUser(unwrapApiData(response));
+  },
+  async logout() {
+    await apiClient.get("/user/logout");
+  },
+  async updateProfile(payload) {
+    const response = await apiClient.patch("/user/me", payload, {
+      headers: payload instanceof FormData ? { "Content-Type": "multipart/form-data" } : undefined,
+    });
+    return mapUser(unwrapApiData(response));
   },
 };
 
