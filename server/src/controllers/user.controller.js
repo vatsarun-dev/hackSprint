@@ -24,7 +24,12 @@ export const registerUser = asyncHandler(async (req, res) => {
 
 	return res
 		.status(201)
-		.json(new ApiResponse(201, "User registered successfully", newUser));
+		.json(
+			new ApiResponse(201, "User registered successfully", {
+				user: newUser,
+				accessToken,
+			}),
+		);
 });
 
 export const loginUser = asyncHandler(async (req, res) => {
@@ -36,7 +41,12 @@ export const loginUser = asyncHandler(async (req, res) => {
 
 	return res
 		.status(200)
-		.json(new ApiResponse(200, "User logged in successfully", user));
+		.json(
+			new ApiResponse(200, "User logged in successfully", {
+				user,
+				accessToken,
+			}),
+		);
 });
 
 export const getRefreshToken = asyncHandler(async (req, res) => {
@@ -44,7 +54,9 @@ export const getRefreshToken = asyncHandler(async (req, res) => {
 
 	res.cookie("accessToken", accessToken, accessTokenOptions);
 
-	return res.status(200).json(new ApiResponse(200, "Access token generated"));
+	return res
+		.status(200)
+		.json(new ApiResponse(200, "Access token generated", { accessToken }));
 });
 
 export const getMe = asyncHandler(async (req, res) => {
@@ -61,8 +73,8 @@ export const logoutUser = asyncHandler(async (req, res) => {
 	await logoutUserService(req.user?.id);
 	console.log("inside logout controller");
 
-	res.clearCookie("accessToken");
-	res.clearCookie("refreshToken");
+	res.clearCookie("accessToken", accessTokenOptions);
+	res.clearCookie("refreshToken", refreshTokenOptions);
 
 	return res
 		.status(200)

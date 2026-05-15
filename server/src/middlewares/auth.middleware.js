@@ -4,7 +4,11 @@ import { ApiError } from "../utils/apiError.js";
 
 const authMiddleware = async (req, res, next) => {
 	try {
-		const token = req.cookies?.accessToken;
+		const authHeader = req.headers.authorization || "";
+		const bearerToken = authHeader.startsWith("Bearer ")
+			? authHeader.slice(7)
+			: "";
+		const token = req.cookies?.accessToken || bearerToken;
 
 		if (!token) {
 			throw new ApiError(401, "No token provided");

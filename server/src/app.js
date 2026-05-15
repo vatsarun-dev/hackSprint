@@ -9,14 +9,27 @@ import projectRoute from "./routes/project.route.js";
 import searchRoute from "./routes/search.route.js";
 import userRoute from "./routes/user.route.js";
 
+const allowedOrigins = [
+	config.origin,
+	config.origin_prod,
+	...config.cors_origins.split(","),
+]
+	.map((origin) => origin.trim().replace(/\/$/, ""))
+	.filter(Boolean);
+
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
 	cors({
-		origin: [config.origin, config.origin_prod]
-			.filter(Boolean)
-			.map((origin) => origin.replace(/\/$/, "")),
+		origin: (origin, callback) => {
+			if (!origin || allowedOrigins.includes(origin.replace(/\/$/, ""))) {
+				callback(null, true);
+				return;
+			}
+
+			callback(new Error(`CORS blocked origin: ${origin}`));
+		},
 		credentials: true,
 	}),
 );
