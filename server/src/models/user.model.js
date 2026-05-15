@@ -60,6 +60,23 @@ const userSchema = new mongoose.Schema(
 				type: String,
 			},
 		},
+		social: {
+			linkedin: {
+				type: String,
+				trim: true,
+				default: "",
+			},
+			github: {
+				type: String,
+				trim: true,
+				default: "",
+			},
+			website: {
+				type: String,
+				trim: true,
+				default: "",
+			},
+		},
 	},
 	{
 		timestamps: true,

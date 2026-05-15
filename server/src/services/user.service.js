@@ -18,6 +18,7 @@ export const registerUserService = async (data) => {
 		profilePicture,
 		banner,
 		description,
+		social,
 	} = registerValidator(data);
 
 	const user = await User.findOne({ email });
@@ -35,6 +36,7 @@ export const registerUserService = async (data) => {
 		profilePicture,
 		banner,
 		description,
+		social,
 	});
 
 	const accessToken = generateAccessToken(newUser._id);
