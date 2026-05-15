@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { authService } from "../../services/authService";
+import { clearAccessToken, getAccessToken } from "../../services/apiClient";
 import { getStoredSession, setStoredSession } from "../../lib/utils";
 
 export const loginUser = createAsyncThunk("auth/loginUser", async (payload) => {
@@ -12,7 +13,8 @@ export const signupUser = createAsyncThunk("auth/signupUser", async (payload) =>
 
 export const initializeAuth = createAsyncThunk("auth/initializeAuth", async (_, { rejectWithValue }) => {
   const stored = getStoredSession("devconnect_session");
-  if (!stored) {
+  const token = getAccessToken();
+  if (!stored && !token) {
     return rejectWithValue("No active session");
   }
 
@@ -70,6 +72,7 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.isBootstrapped = true;
         setStoredSession("devconnect_session", null);
+        clearAccessToken();
       })
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
@@ -111,6 +114,7 @@ const authSlice = createSlice({
         state.user = null;
         state.isAuthenticated = false;
         setStoredSession("devconnect_session", null);
+        clearAccessToken();
       })
       .addCase(updateProfile.pending, (state) => {
         state.loading = true;
