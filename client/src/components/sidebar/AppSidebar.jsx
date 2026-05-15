@@ -1,8 +1,7 @@
-import { ArrowLeft, BookOpen, FolderKanban, LogOut, Menu, UserRound } from "lucide-react";
+import { ArrowLeft, BookOpen, FolderKanban, Menu, UserRound } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleSidebar } from "../../redux/slices/uiSlice";
-import { logoutUser } from "../../redux/slices/authSlice";
 import { cn } from "../../lib/utils";
 import { Button } from "../ui/button";
 import ThemeToggle from "../navbar/ThemeToggle";
@@ -53,23 +52,12 @@ const AppSidebar = () => {
           </NavLink>
         ))}
       </div>
-      <div className={cn("grid gap-2", !collapsed && "grid-cols-2")}>
+      <div className="grid gap-2">
         <Button variant="secondary" className={cn("w-full justify-start px-3", collapsed && "justify-center px-0")} onClick={() => navigate("/")}>
           <ArrowLeft className="h-4 w-4" />
           {!collapsed && "Back home"}
         </Button>
-        <Button
-          variant="secondary"
-          className={cn("w-full justify-start px-3", collapsed && "justify-center px-0")}
-          onClick={() => {
-            dispatch(logoutUser());
-            navigate("/");
-          }}
-        >
-          <LogOut className="h-4 w-4" />
-          {!collapsed && "Logout"}
-        </Button>
-        <div className={cn("flex items-center gap-3 rounded-xl border border-zinc-300 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100", !collapsed && "col-span-2", collapsed && "justify-center px-0")}>
+        <div className={cn("flex items-center gap-3 rounded-xl border border-zinc-300 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100", collapsed && "justify-center px-0")}>
           <ThemeToggle className="h-9 w-9 px-0" />
           {!collapsed && <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Theme</span>}
         </div>
