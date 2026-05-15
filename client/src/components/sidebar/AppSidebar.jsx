@@ -8,7 +8,7 @@ import { Button } from "../ui/button";
 
 const items = [
   { icon: Home, label: "Home", to: "/dashboard/home" },
-  { icon: LayoutDashboard, label: "Dashboard", to: "/dashboard" },
+  { icon: LayoutDashboard, label: "Dashboard", to: "/dashboard", end: true },
   { icon: UserRound, label: "My Profile", to: "/profile/edit" },
   { icon: FolderKanban, label: "Projects", to: "/dashboard/projects" },
   { icon: BookOpen, label: "Blogs", to: "/blogs/write" },
@@ -37,10 +37,11 @@ const AppSidebar = () => {
         </Button>
       </div>
       <div className="flex flex-1 flex-col gap-2">
-        {items.map(({ icon: Icon, label, to }) => (
+        {items.map(({ icon: Icon, label, to, end }) => (
           <NavLink
             key={to}
             to={to}
+            end={end}
             className={({ isActive }) =>
               cn(
                 "flex items-center gap-3 rounded-2xl px-4 py-3 text-sm text-zinc-600 dark:text-zinc-400 transition hover:bg-white/8 hover:text-zinc-950 dark:hover:text-zinc-50",
